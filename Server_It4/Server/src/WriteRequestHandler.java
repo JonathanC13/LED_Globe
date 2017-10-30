@@ -64,6 +64,10 @@ public class WriteRequestHandler {
 	FileOutputStream fileOutputStream;
 	BufferedOutputStream bufferedOutputStream;
 	
+	public WriteRequestHandler() {
+		
+	}
+	
 	public WriteRequestHandler(ReceivedPacketHandler rcvHdl) {	
 		rcvHanlder = rcvHdl;	
 		bytePrinter = new printByteArray(true);
