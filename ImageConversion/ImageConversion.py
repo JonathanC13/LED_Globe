@@ -15,8 +15,8 @@ def thumbNail(img):
 	# May add an option to not expand an image if h < 48.
 
 	hori = calcHori(get_width(img), get_height(img))
-	if (hori == -1):
-		print ("Error convering image to thumbnail. See error above."
+	#if (hori == -1):
+		#print ("Error convering image to thumbnail. See error above."
 		# return error to propagate
 		#return img
 	size = hori, 48
