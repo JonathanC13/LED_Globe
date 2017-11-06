@@ -66,7 +66,7 @@ class runDC:
                 dutyCalc = self.userRPStoDuty(RPS)
                 
 				#Stub
-				#mStub.stubPWM(dutyCalc)
+				#mStub.stubPWM(dutyCalc, RPS)
 				
                 pwm.ChangeDutyCycle(dutyCalc)
                 time.sleep(0.1)
