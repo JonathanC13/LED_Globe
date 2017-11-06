@@ -1,3 +1,7 @@
+#Jonathan Chan
+#Sysc 3010
+#DC motor control for globe
+
 import RPi.GPIO as GPIO
 import time
 import argparse
