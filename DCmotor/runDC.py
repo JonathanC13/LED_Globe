@@ -1,12 +1,10 @@
-#Jonathan Chan
-#Sysc 3010
-#DC motor control for globe
-
 import RPi.GPIO as GPIO
 import time
 import argparse
-GPIO.setmode(GPIO.BOARD)
 
+from MotorStub import motorStub
+
+GPIO.setmode(GPIO.BOARD)
 
 GPIO.setup(12, GPIO.OUT)
 
@@ -48,6 +46,9 @@ class runDC:
     # @param: dutyLim - Calculated duty cycle from user chosen RPS (revolutions per second
     def applyDuty(self):
         
+		#Stub
+		#mStub = motorStub()
+		
         try:
             while True:
                 #RPS read from a text file that is written to by the TFTP server.
@@ -57,9 +58,16 @@ class runDC:
                     break
                 print(RPS)
                 f.close()
+				
+				#Stub
+				#RPS changes
+				#RPS = mStub.changeRPS()
                 
                 dutyCalc = self.userRPStoDuty(RPS)
                 
+				#Stub
+				#mStub.stubPWM(dutyCalc)
+				
                 pwm.ChangeDutyCycle(dutyCalc)
                 time.sleep(0.1)
 
