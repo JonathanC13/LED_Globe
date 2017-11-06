@@ -15,7 +15,9 @@ def thumbNail(img):
 	# May add an option to not expand an image if h < 48.
 
 	hori = calcHori(get_width(img), get_height(img))
-	
+	if (hori == =1):
+		print ("Error convering image to thumbnail. See error above."
+		return img
 	size = hori, 48
 
 	infile = img
@@ -34,20 +36,23 @@ def thumbNail(img):
 	return file
 
 def calcHori(width, height):
-	
-	ratio = int(height)/48
-	hor = width/ratio
-	
-	#6 bytes in 6 micro seconds
-	#1000000 changes in a second
-	# set upper bound to squeeze image horizontal is larger
-	#Arbitrary 250 , 20 micro second intervals
-	if(hor >= 250):
-		hor = 250
-	else if (hor < 1):
-		hor = -1
-		
-	return hor
+	if(width <= 0 or height <= 0):
+		print ("calcHori; 0 or negative parameter. Width: " + str(width) + " height: " + str(height))
+		return -1
+	else:
+		ratio = int(height)/48
+		hor = width/ratio
+
+		#6 bytes in 6 micro seconds
+		#1000000 changes in a second
+		# set upper bound to squeeze image horizontal is larger
+		#Arbitrary 250 , 20 micro second intervals
+		if(hor >= 250):
+			hor = 250
+		else if (hor < 1):
+			hor = -1
+
+		return hor
 			
 def black_and_white(img):
 	
@@ -197,7 +202,9 @@ def commandInput():
 img = load_image(commandInput())	#load initial image
 
 thumb = load_image(thumbNail(img)) #shrink image
-
+#Need to check if converting t othumbnail was succesful or not
+# Cimpl Compare images
+# if true execute next		       
 black_and_white(thumb)			#convert to black and white
 save_as(thumb, "test_BW.jpg")	#save black and white conversion
 show(thumb)
