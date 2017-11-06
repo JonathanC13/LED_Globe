@@ -1,17 +1,18 @@
-from random import randint
 
 class motorStub:
 	def stubPWM(self, duty, RPS):
-                # Could recalculate duty from RPS here and compare for testing.
+        # Could recalculate duty from RPS here and compare for testing.
 		print ("Received duty cycle of: " + str(duty) + ", where the RPS was: " + str(RPS))
 		expectedDuty = userRPStoDuty(RPS)
+		if (expectedDuty == duty):
+			print "Duty from runDC, " + str(duty) + ", is equal to calculated duty using RPS, "+ str(expectedDuty) 
+		else:
+			print "Duty from runDC, " + str(duty) + ", is NOT equal to calculated duty using RPS, "+ str(expectedDuty) 
 		
+	def changeRPS(self, index):
+        list = [0, 50, 100, 150]        
 		
-	def changeRPS(self):
-                
-		rps = randint(0,100)
-		
-		return rps
+		return list[index]
 	    
 	    
         def userRPStoDuty(self, RPS):
