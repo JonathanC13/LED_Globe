@@ -38,7 +38,8 @@ public class JobRequestHandler {
 	
 	// Numbered jobs that this device has direct control of.
 	static final int JOB_1 = 1;		// i.e. run DC motor
-	//static final int JOB_2 = 2;		// i.e. turn on PC
+	//static final int JOB_2 = 2;		// i.e. LED pattern and signal interval to arduino, then execute and sever connection.
+						// After jrqResponseHandler finishes main loop to write pattern, check: if job 2, execute arduino program in seperate method.
 	
 	/*TFTP DC motor job request
 	 * Setup for initial job request
