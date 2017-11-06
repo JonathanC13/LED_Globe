@@ -1,3 +1,6 @@
+Program stored on Arduino controlling the LED ring.
+
+Rough draft
 Load rq and then execute
 Load
 1. client writes the bit array file to a set directory, and records the signal interval for that file
