@@ -107,7 +107,7 @@ def printBitArray(matrix):
 				validBit = False
 				break
 			print matrix[x][y],
-		if(!validBit):
+		if(validBit == False):
 			print ("Contains invalid value that is not a 0 or 1: " + matrix[x][y])
 			break
 	
