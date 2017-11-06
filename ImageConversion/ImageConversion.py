@@ -17,7 +17,7 @@ def thumbNail(img):
 	hori = calcHori(get_width(img), get_height(img))
 	#if (hori == -1):
 		#print ("Error convering image to thumbnail. See error above."
-		# return error to propagate
+		
 		#return img
 	size = hori, 48
 
@@ -32,7 +32,7 @@ def thumbNail(img):
 			im.thumbnail(size, PIL.Image.LANCZOS)
 			im.save(file, "JPEG")
 		except IOError:
-			print "cannot create thumbnail for '%s'" % infile
+			print ("cannot create thumbnail for '%s'" % infile)
 			
 	return file
 
@@ -50,7 +50,7 @@ def calcHori(width, height):
 		#Arbitrary 250 , 20 micro second intervals
 		if(hor >= 250):
 			hor = 250
-		else if (hor < 1):
+		elif (hor < 1):
 			hor = -1
 
 		return hor
@@ -102,12 +102,12 @@ def printBitArray(matrix):
 	validBit = True
 	
 	for y in range(0,numrows):
-		print ' '
+		print (' ')
 		for x in range(0, numcols):
 			if (matrix[x][y] != 0 or matrix[x][y] != 1):
 				validBit = False
 				break
-			print matrix[x][y],
+			print (matrix[x][y],)
 		if(validBit == False):
 			print ("Contains invalid value that is not a 0 or 1: " + matrix[x][y])
 			break
@@ -146,7 +146,7 @@ def signalInterval(width):
 	
 	if(issued < lowerB):
 		issued = lowerB
-	else if fwidth < 1:
+	elif fwidth < 1:
 		issued = defaultIssue
 		
 	
@@ -188,7 +188,7 @@ def commandInput():
 	args = parser.parse_args()
 	
 	print("Opening:")
-	print args.string
+	print (args.string)
 	#print args.integer
 	userArg = args.string
 	
