@@ -1,0 +1,10 @@
+Load rq and then execute
+Load
+1. client writes the bit array file to a set directory, and records the signal interval for that file
+2. client loads bit array from text file to Arduino sketch array and sets signal interval
+
+Execute
+1. adruino executes the program for the pattern and signal interval
+2. polling in loop for first interrupt from hall sensor
+3. After interrupt it will execute the pattern
+4. the following hall sensor interrupts reset the pattern to the beginning.
