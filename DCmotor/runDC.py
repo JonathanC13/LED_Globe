@@ -71,7 +71,7 @@ class runDC:
                 pwm.ChangeDutyCycle(dutyCalc)
                 time.sleep(0.1)
 
-                #read text file
+                #break and end after 10 seconds
                 time.sleep(10)
                 break
                 
