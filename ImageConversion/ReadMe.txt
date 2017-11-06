@@ -1,6 +1,7 @@
 This program is stored on the central RPi that communicates with the RPi controlling the motor and Arduino controlling the LED ring.
 
 Required files:
+Pillow library
 Cimpl.py (No tests, file from Sysc1005 lab, Prof. Bailey)
 	Using some functions.
 	
