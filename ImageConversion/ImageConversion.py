@@ -93,18 +93,27 @@ def bitArray(img):
 def printBitArray(matrix):		
 	numrows = len(matrix[0])
 	numcols = len(matrix)	
+	validBit = True
 	
 	for y in range(0,numrows):
 		print ' '
 		for x in range(0, numcols):
-		
+			if (matrix[x][y] != 0 or matrix[x][y] != 1):
+				validBit = False
+				break
 			print matrix[x][y],
+		if(!validBit):
+			print ("Contains invalid value that is not a 0 or 1: " + matrix[x][y])
+			break
 	
 # Uno r3 clock 16MHz
 # recommneded Revolutions per second is 30
 # Need to determine interval for the signals to the LEDs
 def signalInterval(width):
-	fwidth = float(width)
+	if( width >= 250):
+		fwidth = float(250)
+	else:
+		fwidth = float(width)
 	clock = 16000000
 	freq = float(clock/2)
 	changeTime = float(8/freq)	# each byte requires changTime to change
