@@ -5,3 +5,4 @@ TFTP DC motor job request
 4. the runDC.py will read the value from RPS.txt and calculate the duty cycle to apply, loops constantly reading the file.
 5. When TFTP connection severed, write -1 to RPS so it breaks loop
 
+This program on the RPi controlling the motor.
