@@ -11,7 +11,7 @@ import org.apache.commons.net.tftp.TFTPClient;
 
 public class TftpClientATask extends AsyncTask<String,String,TFTPClient> {
     private static final String     COMMAND     = "shutdown -s"      ;
-    private              TCPClient  tcpClient                        ;
+    private              TFTPClient  tcpClient                        ;
     private              Handler    mHandler                         ;
     private static final String     TAG         = "ShutdownAsyncTask";
 

@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">UIapplication</string>
+    <string name="app_name">LED Globe Controller</string>
+    <string name="start_button">Start the Globe</string>
+    <string name="author_footnote">SYSC 3010, M9, 2017</string>
+    <string name="end_button">Stop the Globe</string>
+    <string name="get_button">Get Input</string>
 </resources>
