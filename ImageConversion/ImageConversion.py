@@ -17,7 +17,8 @@ def thumbNail(img):
 	hori = calcHori(get_width(img), get_height(img))
 	if (hori == -1):
 		print ("Error convering image to thumbnail. See error above."
-		return img
+		# return error to propagate
+		#return img
 	size = hori, 48
 
 	infile = img
