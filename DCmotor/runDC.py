@@ -56,6 +56,9 @@ class runDC:
                 RPS = f.read()
                 if (RPS == -1):
                     break
+		else if (RPS >= 141):
+			RPS = 141
+		
                 print(RPS)
                 f.close()
 				
