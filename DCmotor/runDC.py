@@ -19,9 +19,9 @@ class runDC:
     # gets user desired RPSec then converts to duty cycle
     def userRPStoDuty(self, RPS):
 
-        #current DC motor: #:29DCM28 - 8500 RPM. 141 RPSec @12V (no load)
+        #current DC motor: #:29DCM28 - 8500 RPM. 141 RPSec @9V (no load)
         rpsMAX = 141
-        dcV = 12        
+        dcV = 9        
         
         #(Theo aV/Vmax) x rpsMAX = desired rps
         
