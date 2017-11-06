@@ -48,7 +48,8 @@ class runDC:
         
 		#Stub
 		#mStub = motorStub()
-		
+		#testNum = 0
+		#numTest = 3
         try:
             while True:
                 #RPS read from a text file that is written to by the TFTP server.
@@ -61,10 +62,16 @@ class runDC:
 		
                 print(RPS)
                 f.close()
-				
+		
+		 
 				#Stub
 				#RPS changes
-				#RPS = mStub.changeRPS()
+				#RPS = mStub.changeRPS(testNum)
+				#if (testNum + 1 > numTest):
+				#	testNum = 0
+				## or break applying duty to pwm and clean up
+				#else:
+				#	testNum = testNum + 1
                 
                 dutyCalc = self.userRPStoDuty(RPS)
                 
