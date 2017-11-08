@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 import argparse
 
-from MotorStub import motorStub
+from MotorStub import *
 
 GPIO.setmode(GPIO.BOARD)
 
@@ -48,6 +48,7 @@ class runDC:
         
 		#Stub
 		#mStub = motorStub()
+		#mDriv = motorDriver()
 		#testNum = 0
 		#numTest = 3
         try:
@@ -57,16 +58,18 @@ class runDC:
                 RPS = f.read()
                 if (RPS == -1):
                     break
-		else if (RPS >= 141):
-			RPS = 141
+				else if(RPS < 0):
+					RPS = 0
+				else if (RPS >= 141):
+					RPS = 141
 		
                 print(RPS)
                 f.close()
 		
 		 
-				#Stub
+				#Driver
 				#RPS changes
-				#RPS = mStub.changeRPS(testNum)
+				#RPS = mDriv.changeRPS(testNum)
 				#if (testNum + 1 > numTest):
 				#	testNum = 0
 				## or break applying duty to pwm and clean up
@@ -79,7 +82,7 @@ class runDC:
 				#mStub.stubPWM(dutyCalc, RPS)
 				
                 pwm.ChangeDutyCycle(dutyCalc)
-                time.sleep(0.1)
+                time.sleep(0.5)
 
                 #break and end after 10 seconds
                 time.sleep(10)
