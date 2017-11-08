@@ -10,11 +10,6 @@ class motorStub:
 			print "Duty from runDC, " + str(duty) + ", is equal to calculated duty using RPS, "+ str(expectedDuty) 
 		else:
 			print "Duty from runDC, " + str(duty) + ", is NOT equal to calculated duty using RPS, "+ str(expectedDuty) 
-		
-	def changeRPS(self, index):
-        list = [0, 50, 100, 150]        
-		
-		return list[index]
 	    
 	    
 	def userRPStoDuty(self, RPS):
