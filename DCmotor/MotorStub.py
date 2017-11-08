@@ -38,7 +38,7 @@ class motorStub:
 
 		return duty
 
-class motorDriver:
+class motorInputs:
 
 	def changeRPS(self, index):
         list = [0, 50, 100, 150]        

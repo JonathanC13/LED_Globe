@@ -48,7 +48,7 @@ class runDC:
         
 		#Stub
 		#mStub = motorStub()
-		#mDriv = motorDriver()
+		#mIn = motorInputs()
 		#testNum = 0
 		#numTest = 3
         try:
@@ -63,23 +63,24 @@ class runDC:
 				else if (RPS >= 141):
 					RPS = 141
 		
+				fRPS = float(RPS)
                 print(RPS)
                 f.close()
 		
 		 
 				#Driver
 				#RPS changes
-				#RPS = mDriv.changeRPS(testNum)
+				#RPS = mIn.changeRPS(testNum)
 				#if (testNum + 1 > numTest):
 				#	testNum = 0
 				## or break applying duty to pwm and clean up
 				#else:
 				#	testNum = testNum + 1
                 
-                dutyCalc = self.userRPStoDuty(RPS)
+                dutyCalc = self.userRPStoDuty(fRPS)
                 
 				#Stub
-				#mStub.stubPWM(dutyCalc, RPS)
+				#mStub.stubPWM(dutyCalc, fRPS)
 				
                 pwm.ChangeDutyCycle(dutyCalc)
                 time.sleep(0.5)
