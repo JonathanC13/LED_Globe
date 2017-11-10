@@ -18,6 +18,11 @@ class motorStub:
 		rpsMAX = 141
 		dcV = 9        
 		
+		if(RPS < 0):
+			RPS = 0
+		else if (RPS >= 141):
+			RPS = 141
+			
 		#(Theo aV/Vmax) x rpsMAX = desired rps
 		
 		
@@ -39,9 +44,13 @@ class motorStub:
 		return duty
 
 class motorInputs:
-
-	def changeRPS(self, index):
-        list = [0, 50, 100, 150]        
+	input = 0
+	
+	def changeRPS(self):     
 		
-		return list[index]
+		return input
+	
+	def setInput(self, testInput):
+		input = float(testInput)
 		
+#JUnit example assertEquals()

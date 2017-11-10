@@ -4,6 +4,7 @@ import argparse
 
 from MotorStub import *
 
+#GPIO setup commented out when testing with stub
 GPIO.setmode(GPIO.BOARD)
 
 GPIO.setup(12, GPIO.OUT)
@@ -23,6 +24,11 @@ class runDC:
         rpsMAX = 141
         dcV = 9        
         
+		if(RPS < 0):
+			RPS = 0
+		else if (RPS >= 141):
+			RPS = 141
+		
         #(Theo aV/Vmax) x rpsMAX = desired rps
         
         
@@ -49,11 +55,15 @@ class runDC:
 		#Stub
 		#mStub = motorStub()
 		#mIn = motorInputs()
-		#testNum = 0
-		#numTest = 3
+		
         try:
             while True:
                 #RPS read from a text file that is written to by the TFTP server.
+				
+				#Input
+				#RPS changes
+				#RPS = mIn.changeRPS()
+				
                 f = open('/home/pi/Desktop/RPS','r')
                 RPS = f.read()
                 if (RPS == -1):
@@ -67,30 +77,24 @@ class runDC:
                 print(RPS)
                 f.close()
 		
-		 
-				#Driver
-				#RPS changes
-				#RPS = mIn.changeRPS(testNum)
-				#if (testNum + 1 > numTest):
-				#	testNum = 0
-				## or break applying duty to pwm and clean up
-				#else:
-				#	testNum = testNum + 1
-                
                 dutyCalc = self.userRPStoDuty(fRPS)
                 
 				#Stub
 				#mStub.stubPWM(dutyCalc, fRPS)
 				
                 pwm.ChangeDutyCycle(dutyCalc)
-                time.sleep(0.5)
+                time.sleep(2)
 
                 #break and end after 10 seconds
-                time.sleep(10)
-                break
+                #time.sleep(10)
+                #break
                 
         except KeyboardInterrupt:
             pass
+		except ValueError:
+			print "Could not convert data to an integer."
+		except:
+			print "Unexpected error:", sys.exc_info()[0]
         pwm.stop()
 
         GPIO.cleanup()
