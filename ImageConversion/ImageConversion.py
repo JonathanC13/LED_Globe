@@ -41,9 +41,12 @@ def calcHori(width, height):
 		print ("calcHori; 0 or negative parameter. Width: " + str(width) + " height: " + str(height))
 		return -1
 	else:
-		ratio = int(height)/48
-		hor = width/ratio
-
+		ratio = float(float(height)/48)
+		
+		fhor = float(width/ratio)
+		
+		hor = int(fhor)
+		
 		#6 bytes in 6 micro seconds
 		#1000000 changes in a second
 		# set upper bound to squeeze image horizontal is larger
@@ -104,27 +107,29 @@ def printBitArray(matrix):
 	for y in range(0,numrows):
 		print (' ')
 		for x in range(0, numcols):
-			if (matrix[x][y] != 0 or matrix[x][y] != 1):
-				validBit = False
-				break
-			print (matrix[x][y],)
-		if(validBit == False):
-			print ("Contains invalid value that is not a 0 or 1: " + matrix[x][y])
-			break
+			#if (matrix[x][y] != 0 or matrix[x][y] != 1):
+				#validBit = False
+				#break
+			print (matrix[x][y]),
+		#if(validBit == False):
+			#print ("Contains invalid value that is not a 0 or 1: " + str(matrix[x][y]))
+			#break
 	
 # Uno r3 clock 16MHz
-# recommneded Revolutions per second is 30
+# recommneded Revolutions per second is 45 (unloaded) so loaded can be approx 30
 # Need to determine interval for the signals to the LEDs
 def signalInterval(width):
 	if( width >= 250):
 		fwidth = float(250)
+	elif (width <= 0):
+		fwidth == float(1)
 	else:
 		fwidth = float(width)
 	clock = 16000000
 	freq = float(clock/2)
 	changeTime = float(8/freq)	# each byte requires changTime to change
 	ledArray = 48
-	rps = 30
+	rps = 45
 	
 	#print changeTime
 	
