@@ -189,8 +189,9 @@ class ImageConversion:
 				
 				set_color(img, x, y, black) 
 
+# Receive image file from command line. Ex: python ImageConversion.py -s test.jpg
 #def commandInput():			
-	#-- cmd line arg
+#-- cmd line arg --
 parser = argparse.ArgumentParser(description = 'Enter a filename, have the file in the same directory/folder.')
 parser.add_argument("-s", "--string", type=str, required=True,
 							help='filename of the image to be used. Ex. python ImageConversion.py -s test.jpg')
@@ -209,21 +210,24 @@ userArg = args.string
 #---------
 
 #---
-#-- main
+#-- main --
 
-Convert = ImageConversion()
+Convert = ImageConversion()     # Create instance
 
-img = load_image(userArg)	#load initial image
-thumbFile = Convert.thumbNail(img) #shrink image
-thumb = load_image(thumbFile) 
-#Need to check if converting t othumbnail was succesful or not
-# Cimpl Compare images
-# if true execute next		       
-Convert.black_and_white(thumb)			#convert to black and white
-save_as(thumb, "test_BW.jpg")	#save black and white conversion
-show(thumb)
+img = load_image(userArg)	# load image that was specified in args
+thumbFile = Convert.thumbNail(img) # shrink image to a specified size, then save in a seperate image file. Ex: testthumbnail.jpg
+thumb = load_image(thumbFile)   # load the shrunken image file 
 
-issueRate = Convert.signalInterval(thumb.get_width())		# this value sent with bitArray to Arduino 
-												# so it will know the interval to issue the next pattern
-bits = Convert.bitArray(thumb)					#convert black white to bit array
-Convert.printBitArray(bits)
+if thumb.get_height == 48:
+		       
+        Convert.black_and_white(thumb)	#convert to black and white
+        save_as(thumb, "test_BW.jpg")	#save black and white conversion to as an image file.
+        #show(thumb)                     #just show image, close the pop up to conitnue program.
+
+        issueRate = Convert.signalInterval(thumb.get_width())		# issue rate is the interval to send each column to the LEDs
+                                                                                                                                       
+        bits = Convert.bitArray(thumb)					#convert black white to bit array
+        Convert.printBitArray(bits)                                     # just printing the bit array for visualization to compare to what is being presented on the globe.
+else:
+        print("Adjusting size of image failed.")
+        
