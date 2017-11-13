@@ -16,12 +16,10 @@ class ImageConversion:
 		# May add an option to not expand an image if h < 48.
 
 		hori = self.calcHori(get_width(img), get_height(img))
-		#if (hori == -1):
-			#print ("Error convering image to thumbnail. See error above."
-			
-			#return img
+                # hori of 0 will result in an Type error down the line
+                
 		size = hori, 48
-
+                
 		infile = img
 		
 		for infile in sys.argv[1:]:
@@ -31,6 +29,8 @@ class ImageConversion:
 				im = PIL.Image.open(infile)
 				
 				im.thumbnail(size, PIL.Image.LANCZOS)
+                                # hori of 0 will result in an Type error
+				
 				im.save(file, "JPEG")
 			except IOError:
 				print ("cannot create thumbnail for '%s'" % infile)
@@ -40,7 +40,7 @@ class ImageConversion:
 	def calcHori(self, width, height):
 		if(width <= 0 or height <= 0):
 			print ("calcHori; 0 or negative parameter. Width: " + str(width) + " height: " + str(height))
-			return -1
+			return 0
 		else:
 			ratio = float(float(height)/48)
 			
@@ -100,6 +100,9 @@ class ImageConversion:
 		
 		# add checks for type, values
 		# pre condition: black and white image
+
+	# Honestly this method could be simply print a 2d array.
+	# But we'll have it only print 0s and 1s
 	def printBitArray(self, matrix):		
 		numrows = len(matrix[0])
 		numcols = len(matrix)	
@@ -108,13 +111,17 @@ class ImageConversion:
 		for y in range(0,numrows):
 			print (' ')
 			for x in range(0, numcols):
-				#if (matrix[x][y] != 0 or matrix[x][y] != 1):
-					#validBit = False
-					#break
+				if (matrix[x][y] != 0):
+					validBit = False
+					break
+				elif (matrix[x][y] != 1):
+                                        validBit = False
+                                        break
+                                
 				print (matrix[x][y]),
-			#if(validBit == False):
-				#print ("Contains invalid value that is not a 0 or 1: " + str(matrix[x][y]))
-				#break
+			if(validBit == False):
+				print ("Contains invalid value that is not a 0 or 1: " + str(matrix[x][y]))
+				break
 		
 	# Uno r3 clock 16MHz
 	# recommneded Revolutions per second is 45 (unloaded) so loaded can be approx 30
