@@ -16,12 +16,11 @@ class ImageConversion:
 		# May add an option to not expand an image if h < 48.
 
 		hori = self.calcHori(get_width(img), get_height(img))
-                # hori of 0 will result in an Type error down the line
+                # hori of 0 will result in an ValueError down the line
                 
 		size = hori, 48
-                
 		infile = img
-		
+                
 		for infile in sys.argv[1:]:
 			file = os.path.splitext(infile)[0]
 			file = file + "thumbnail.jpg"
@@ -32,14 +31,15 @@ class ImageConversion:
                                 # hori of 0 will result in an Type error
 				
 				im.save(file, "JPEG")
-			except IOError:
-				print ("cannot create thumbnail for '%s'" % infile)
+			except:
+                               print ("Unexpected error ", sys.exc_info()[0])
+				#print ("cannot create thumbnail for '%s'" % infile)
 				
-		return file
+                return file
 
 	def calcHori(self, width, height):
 		if(width <= 0 or height <= 0):
-			print ("calcHori; 0 or negative parameter. Width: " + str(width) + " height: " + str(height))
+			#print ("calcHori: 0 or negative parameter. Width: " + str(width) + " height: " + str(height))
 			return 0
 		else:
 			ratio = float(float(height)/48)
@@ -111,16 +111,14 @@ class ImageConversion:
 		for y in range(0,numrows):
 			print (' ')
 			for x in range(0, numcols):
-				if (matrix[x][y] != 0):
+                                chk = matrix[x][y]
+				if (chk != 0 and chk !=1):
 					validBit = False
 					break
-				elif (matrix[x][y] != 1):
-                                        validBit = False
-                                        break
                                 
 				print (matrix[x][y]),
-			if(validBit == False):
-				print ("Contains invalid value that is not a 0 or 1: " + str(matrix[x][y]))
+                        if(validBit == False):
+				print ("Contains invalid value that is not a 0 or 1: " + str(matrix[x][y]) + ", Pass")
 				break
 		
 	# Uno r3 clock 16MHz
@@ -130,14 +128,14 @@ class ImageConversion:
 		if( width >= 250):
 			fwidth = float(250)
 		elif (width <= 0):
-			fwidth == float(1)
+			fwidth = float(1)
 		else:
 			fwidth = float(width)
 		clock = 16000000
 		freq = float(clock/2)
 		changeTime = float(8/freq)	# each byte requires changTime to change
 		ledArray = 48
-		rps = 45
+		rps = 45                        # Figure out what unload RPS translates to this project loaded rps.
 		
 		#print changeTime
 		
@@ -189,45 +187,5 @@ class ImageConversion:
 				
 				set_color(img, x, y, black) 
 
-# Receive image file from command line. Ex: python ImageConversion.py -s test.jpg
-#def commandInput():			
-#-- cmd line arg --
-parser = argparse.ArgumentParser(description = 'Enter a filename, have the file in the same directory/folder.')
-parser.add_argument("-s", "--string", type=str, required=True,
-							help='filename of the image to be used. Ex. python ImageConversion.py -s test.jpg')
 
-#parser.add_argument("-i", "--integer", type=int, default=0)
-
-parser.print_help()
-args = parser.parse_args()
-
-print("Opening:")
-print (args.string)
-#print args.integer
-userArg = args.string
-
-#return userArg
-#---------
-
-#---
-#-- main --
-
-Convert = ImageConversion()     # Create instance
-
-img = load_image(userArg)	# load image that was specified in args
-thumbFile = Convert.thumbNail(img) # shrink image to a specified size, then save in a seperate image file. Ex: testthumbnail.jpg
-thumb = load_image(thumbFile)   # load the shrunken image file 
-
-if thumb.get_height == 48:
-		       
-        Convert.black_and_white(thumb)	#convert to black and white
-        save_as(thumb, "test_BW.jpg")	#save black and white conversion to as an image file.
-        #show(thumb)                     #just show image, close the pop up to conitnue program.
-
-        issueRate = Convert.signalInterval(thumb.get_width())		# issue rate is the interval to send each column to the LEDs
-                                                                                                                                       
-        bits = Convert.bitArray(thumb)					#convert black white to bit array
-        Convert.printBitArray(bits)                                     # just printing the bit array for visualization to compare to what is being presented on the globe.
-else:
-        print("Adjusting size of image failed.")
         

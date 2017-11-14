@@ -1,8 +1,7 @@
 Operation without network
 
-Arduino, battery powered
-1. connect to PC
-2. load image to set directory
-3. manually execute
-
-Rpi controlling DC motor acting as PC.
+1. Use RPi controlling the motor as a standalone PC
+2. Connect RPi to battery powered Arduino
+3. load image to set directory, execute sketch program for the LEDs
+4. Disconnect usb from Arduino
+5. Start motor

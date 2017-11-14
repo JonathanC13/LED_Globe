@@ -1,4 +1,4 @@
-import ImageConversion import ImageConversion
+from ImageConversion import ImageConversion
 from Cimpl import *
 
 import PIL as pillow
@@ -14,16 +14,21 @@ class ImgConvUnitTests:
 	# Load image with valid file format and non empty
         # Input: created image with w = 200, h = 200
         # Expected: get height and width should equal w = 48 and h = 48
-	def test_thumbNail_normal():
+	def test_thumbNail_normal(self):
 	
 		conversion = ImageConversion()
 		
 		color = create_color(100,150,80)
                 created = create_image(200,200,color)
+                save_as(created, "testCreated.jpg")
 
-                actual = conversion.thumbNail(created)
-                
-                if (actual.get_width == 48 && acutal.get_height == 48):
+                loadCreated = load_image("testCreated.jpg")
+
+                thumbfile = conversion.thumbNail(loadCreated)
+                thumb = load_image(str(thumbfile))
+                print(str(thumb.get_height()))
+                if (thumb.get_width() <= 48 and thumb.get_height() <= 48):
+                        print(str(thumb.getheight))
                         print ("Pass")
                 else:
                         print("Fail")
@@ -31,13 +36,14 @@ class ImgConvUnitTests:
 	
 	# Load image with invalid file format
         # Input: Test.pdf
-        # Expected: IO error from Cimpl, when attempting to call get_width
-	def test_thumbNail_invaldFormat():
+        # Expected: NameError from Cimpl, when attempting to call get_width
+	def test_thumbNail_invalidFormat(self):
 	
 		conversion = ImageConversion()
+		actual = ""
 		try:
                         actual = conversion.thumbNail(Test.pdf)         # IO error
-                except IOError:
+                except NameError:
                         print ("Pass")
                 except:
                         print ("Unexpected error ", sys.exc_info()[0])
@@ -45,23 +51,26 @@ class ImgConvUnitTests:
 
 	# Load image with empty file
         # Input: created file with w=0 and h = 0
-        # Expected: Type error from Cimpl, image of (0,0) invalid.
-	def test_thumbNail_emptyImg():
+        # Expected: ValueError from Cimpl, image of (0,0) invalid. thumbNail with empty image gives an unboundedLocalError
+	def test_thumbNail_emptyImg(self):
 		conversion = ImageConversion()
 
 		black = create_color(0,0,0)
 		try:
                         testIMG = create_image(0,0,black)          # create test image. Error will be from this function call.
                         
-                except TypeError:
-                        print ("Fail")
+                except ValueError:
+                        print ("Pass | "),
                 except:
                         print ("--1--, Unexpected error ", sys.exc_info()[0])
 
                 try:    
-                        actual = conversion.thumbNail(testIMG)  # Check if this code is able to be reached after catching previous exception
+                        actual = conversion.thumbNail(testIMG)
+                except UnboundLocalError:
+                        print ("Pass")
                 except:
                         print ("--2--, Unexpected error ", sys.exc_info()[0])
+                        
 	# ----- thumbNail(img) test cases END -----
 	
 	# ----- calcHori(width, height) test cases START -----
@@ -69,86 +78,86 @@ class ImgConvUnitTests:
 	# Test invalid image width with valid height
 	# INPUT: w=-5, h=10
 	# EXPECTED: 0
-	def test_calcHori_invalidW():
+	def test_calcHori_invalidW(self):
 		expected = 0
 	
 		conversion = ImageConversion()
-		acutal = conversion.calcHori(-5, 10)
+		hor = conversion.calcHori(-5, 10)
 		
-		if(actual == expected):
-			print ('Acutal Result: ' + str(actual) + ' Status: PASS')
+		if(hor == expected):
+			print ('Acutal Result: ' + str(hor) + ' Status: PASS')
 		else: 
-			print ('Acutal Result: ' + str(actual) + ' Status: FAIL')
+			print ('Acutal Result: ' + str(hor) + ' Status: FAIL')
 	
 	# Test normal case, valid width and height
 	# INPUT: w=100, h=200
 	# EXPECTED: 24
-	def test_calcHori_normal():
+	def test_calcHori_normal(self):
 		expected = 24
 	
-		conversion = ImageConversion():
-		acutal = conversion.calcHori(100, 200)
+		conversion = ImageConversion()
+		hor = conversion.calcHori(100, 200)
 		
-		if(actual == expected):
-			print ('Acutal Result: ' + str(actual) + ' Status: PASS')
+		if(hor == expected):
+			print ('Acutal Result: ' + str(hor) + ' Status: PASS')
 		else: 
-			print ('Acutal Result: ' + str(actual) + ' Status: FAIL')
+			print ('Acutal Result: ' + str(hor) + ' Status: FAIL')
 	
 	# Test very large width where; width/(h/48) < 250
 	# INPUT: w=3000, h=1000
 	# EXPECTED: 144
-	def test_calcHori_largeW():
+	def test_calcHori_largeW(self):
 		expected = 144
 		
 		conversion = ImageConversion()
-		acutal = conversion.calcHori(3000, 1000)
+		hor = conversion.calcHori(3000, 1000)
 		
-		if(actual == expected):
-			print ('Acutal Result: ' + str(actual) + ' Status: PASS')
+		if(hor == expected):
+			print ('Acutal Result: ' + str(hor) + ' Status: PASS')
 		else: 
-			print ('Acutal Result: ' + str(actual) + ' Status: FAIL')
+			print ('Acutal Result: ' + str(hor) + ' Status: FAIL')
 	
 	# Test invalid height with valid height	
 	# INPUT: w=48, h=0
 	# EXPECTED: 0
-	def test_calcHori_invalidH():
+	def test_calcHori_invalidH(self):
 		expected = 0
 		
 		conversion = ImageConversion()
-		acutal = conversion.calcHori(48, 0)
+		hor = conversion.calcHori(48, 0)
 		
-		if(actual == expected):
-			print ('Acutal Result: ' + str(actual) + ' Status: PASS')
+		if(hor == expected):
+			print ('Acutal Result: ' + str(hor) + ' Status: PASS')
 		else: 
-			print ('Acutal Result: ' + str(actual) + ' Status: FAIL')
+			print ('Acutal Result: ' + str(hor) + ' Status: FAIL')
 	
 	# Test very large height with valid Width, where width/(h/48) < 250
 	# INPUT: w=1500, h=4000
 	# EXPECTED: 18
-	def test_calcHori_largeH():
+	def test_calcHori_largeH(self):
 		expected = 18
 		
 		conversion = ImageConversion()
-		acutal = conversion.calcHori(1500, 4000)
+		hor = conversion.calcHori(1500, 4000)
 		
-		if(actual == expected):
-			print ('Acutal Result: ' + str(actual) + ' Status: PASS')
+		if(hor == expected):
+			print ('Acutal Result: ' + str(hor) + ' Status: PASS')
 		else: 
-			print ('Acutal Result: ' + str(actual) + ' Status: FAIL')
+			print ('Acutal Result: ' + str(hor) + ' Status: FAIL')
 	
 	# Test a width and height, where width/(h/48) >= 250
 	# INPUT: w=17000, h=3000
 	# EXPECTED: 250
-	def test_calcHori_spc():
+	def test_calcHori_spc(self):
 		expected = 250
 		
 		conversion = ImageConversion()
-		acutal = conversion.calcHori(17000, 3000)
+		hor = conversion.calcHori(17000, 3000)
 		
-		if(actual == expected):
-			print ('Acutal Result: ' + str(actual) + ' Status: PASS')
+		if(hor == expected):
+			print ('Acutal Result: ' + str(hor) + ' Status: PASS')
 		else: 
-			print ('Acutal Result: ' + str(actual) + ' Status: FAIL')
+			print ('Acutal Result: ' + str(hor) + ' Status: FAIL')
 	
 	# ----- calcHori(width, height) test cases END -----
 	
@@ -157,54 +166,61 @@ class ImgConvUnitTests:
         # Load image with valid file format and non empty
         # Input: created image with r,g,b that will all be converted to black (0). Valid file format due to creation.
         # Expected: Shows all black image
-	def test_black_and_white_normal():
+	def test_black_and_white_normal(self):
 
                 NEARblack = create_color(80,50,80)
-                NEARblackIMG = create_image(100,100,black)          # create test image , purplish
+                NEARblackIMG = create_image(100,100,NEARblack)          # create test image , purplish
                 
 		conversion = ImageConversion()
 		conversion.black_and_white(NEARblackIMG)
 
 		binary = True
+		#show(NEARblackIMG)
                 for j in range (0,100):
                         for i in range(0,100):
-                                if( get_color(NEARblackIMG, i, j)!= 0 ):
+                                chk = get_color(NEARblackIMG, i, j)
+                                if( chk != (0,0,0) ):
                                         binary = False
-                                        print("Fail, not converted to black. co-ord: " + str(i) ", " + str(j)):
+                                        print("Fail, not converted to black. co-ord: " + str(i) +", " + str(j))
                                         break
                         if (binary == False):
                                 break
-                print("Pass, converted image contains only black")
+                print("Converted image contains only black, Pass")
 		
 
         # Load image with invalid file format
         # Input: Test.pdf
-        # Expected: IO error from Cimpl
-	def test_black_and_white_invalidFormat():
+        # Expected: NameError from Cimpl
+	def test_black_and_white_invalidFormat(self):
 		conversion = ImageConversion()
 		try:
                         conversion.black_and_white(Test.pdf)
-                except IOError:
+                except NameError:
                         print ("Pass")
                 except:
                         print ("Unexpected error ", sys.exc_info()[0])
                 
         # Load image with empty file
         # Input: created image file with w =0 and h = 0
-        # Expected: Type error from Cimpl, image of (0,0) invalid.
-	def test_black_and_white_emptyImg():
+        # Expected: ValueError from Cimpl, image of (0,0) invalid.
+	def test_black_and_white_emptyImg(self):
 		conversion = ImageConversion()
 
                 black = create_color(0,0,0)
                 try:
                         testIMG = create_image(0,0,black)          # create test image. Error will be from this function call.
-                except TypeError:
-                        print("Pass")
+                except ValueError:
+                        print("Pass | "),
+                except:
+                        print ("--1--, Unexpected error ", sys.exc_info()[0])  
 
                 try:
                         conversion.black_and_white(testIMG)
+                except UnboundLocalError:
+                        print ("Pass")
                 except:
-                        print ("Unexpected error ", sys.exc_info()[0])
+                        print ("--2--, Unexpected error ", sys.exc_info()[0])
+                        
                 
 	# ----- black_and_while(img) test cases END -----
 
@@ -213,7 +229,7 @@ class ImgConvUnitTests:
 	# Load file with valid file format and non-zero width and height
 	# INPUT: Created full black image with valid extension and w = 100 and h = 100. Cimpl created image has valid format
 	# Expected: return bit array of all 0s
-	def test_bitArray_normal():
+	def test_bitArray_normal(self):
 
                 black = create_color(0,0,0)
                 blackIMG = create_image(100,100,black)          # create test image
@@ -222,6 +238,8 @@ class ImgConvUnitTests:
 
 		actual = conversion.bitArray(blackIMG)          # stores returned bit array
 
+                r, c = 100, 100
+
 		bitMatrix = [[0 for h in range(r)] for w in range(c)]
                 allBlack = True
 		
@@ -229,7 +247,7 @@ class ImgConvUnitTests:
 			for i in range(0, c):
 				if (actual[i][j] != 0):
                                         allBlack =False
-                                        print("Fail, not 0 at: " + str(i) ", " + str(j))
+                                        print("Fail, not 0 at: " + str(i) +", " + str(j))
                                         break
                         if(allBlack == False):
                                 break
@@ -238,29 +256,29 @@ class ImgConvUnitTests:
 
 	# Load file with invalid image file format
 	# INPUT: Test.pdf
-	# Expected: IO error. I think the error is thrown from Cimpl due to get_height in the first line, no height of a .pdf
-	def test_bitArray_invalidFormat():
+	# Expected: NameError. I think the error is thrown from Cimpl due to get_height in the first line, no height of a .pdf
+	def test_bitArray_invalidFormat(self):
                 
 		conversion = ImageConversion()
 
 		try:
                         testArray = conversion.bitArray(Test.pdf)
-                except TypeError:
+                except NameError:
                         print ("Pass")
                 except:
                         print ("Unexpected error ", sys.exc_info()[0])
 
         # Load file with invalid image file format
 	# INPUT: Create image with 0 width and 0 height
-	# Expected: type error. I think the error is thrown from Cimpl due to create_image here in this case, image of (0,0) invalid.
-	def test_bitArray_emptyImg():
+	# Expected: ValueError. I think the error is thrown from Cimpl due to create_image here in this case, image of (0,0) invalid.
+	def test_bitArray_emptyImg(self):
 
                 black = create_color(0,0,0)
 
                 try:
                         testIMG = create_image(0,0,black)          # create test image. Error will be from this function call.
-                except TypeError:
-                        print ("Pass")
+                except ValueError:
+                        print ("Pass | "),
                 except:
                         print ("--1--, Unexpected error ", sys.exc_info()[0])
                 
@@ -268,8 +286,11 @@ class ImgConvUnitTests:
 
                 try:
         		testArray = conversion.bitArray(testIMG)        
+                except UnboundLocalError:
+                        print("Pass")
                 except:
                         print ("--2--, Unexpected error ", sys.exc_info()[0])
+                        
 	# ----- bitArray(matrix) test cases END -----
 	
 	# ----- printBitArray(matrix) test cases START -----
@@ -279,7 +300,7 @@ class ImgConvUnitTests:
         # Load empty matrix
 	# INPUT: Input empty matrix
 	# Expected: prints nothing
-	def test_printBitArray_empty():
+	def test_printBitArray_empty(self):
 		testMatrix =[[],[]]
                 
 		conversion = ImageConversion()
@@ -288,7 +309,7 @@ class ImgConvUnitTests:
         # Input non empty matrix fill with 0s
 	# INPUT: Input 2x2 matrix filled with 0s
 	# Expected: prints the array correctly
-	def test_printBitArray_valid0():
+	def test_printBitArray_valid0(self):
 		testMatrix =[[0,0],[0,0]]
 		conversion = ImageConversion()
 		conversion.printBitArray(testMatrix)
@@ -296,7 +317,7 @@ class ImgConvUnitTests:
         # Input non empty matrix fill with 1s
 	# INPUT: Input 4x4 matrix filled with 1s
 	# Expected: prints the array correctly
-	def test_printBitArray_valid1():
+	def test_printBitArray_valid1(self):
 		testMatrix =[[1,1,1,1],[1,1,1,1]]
 		conversion = ImageConversion()
 		conversion.printBitArray(testMatrix)
@@ -304,7 +325,7 @@ class ImgConvUnitTests:
         # Input non empty matrix with number of rows > 49 filled with 0s
 	# INPUT: Input 49x2 matrix filled with 0s
 	# Expected: prints the array correctly
-	def test_printBitArray_largeRow():
+	def test_printBitArray_largeRow(self):
 		r, c = 49, 2
 		testMatrix = [[0 for h in range(r)] for w in range(c)]
 
@@ -318,7 +339,7 @@ class ImgConvUnitTests:
         # Input non empty matrix with number of columns > 251 filled with 1s
 	# INPUT: Input 10x251 matrix filled with 1s
 	# Expected: prints the array correctly
-	def test_printBitArray_largeCol():
+	def test_printBitArray_largeCol(self):
 		r, c = 10, 251
 		testMatrix = [[0 for h in range(r)] for w in range(c)]
 
@@ -332,7 +353,7 @@ class ImgConvUnitTests:
         # Input non empty matrix with integers other than 0 or 1
 	# INPUT: Input 2x2 matrix [2,2],[3,4]
 	# Expected: prints an error message indicating non binary values in matrix
-	def test_printBitArray_invalidVal():
+	def test_printBitArray_invalidVal(self):
 		testMatrix =[[2,2],[3,4]]
 		conversion = ImageConversion()
 		conversion.printBitArray(testMatrix)
@@ -340,7 +361,7 @@ class ImgConvUnitTests:
         # Input non empty matrix with non integers
 	# INPUT: Input 1x2 matrix ['h','i'],[]
 	# Expected: prints an error message indicating non binary values in matrix
-	def test_printBitArray_nonInt():
+	def test_printBitArray_nonInt(self):
 		testMatrix =[['h','i'],[]]
 		conversion = ImageConversion()
 		conversion.printBitArray(testMatrix)
@@ -352,58 +373,61 @@ class ImgConvUnitTests:
         # Invalid width.
 	# INPUT: w=-5
 	# EXPECTED: 3.7x10^-3
-	def test_signalInterval_invalidW():
+	def test_signalInterval_invalidW(self):
 		expected = 3.7*10**-3
-		
+		w = -5
 		conversion = ImageConversion()
-		fresult = float(conversion.signalInterval(-5))
-		actual = round(fresult,4)
-		if(expected == actual):
+		fresult = float(conversion.signalInterval(w))
+		issued = round(fresult,4)
+		if(expected == issued):
 		
-			print ('Acutal Result: ' + str(actual) + ' Status: PASS')
+			print ('Acutal Result: ' + str(issued) + ' Status: PASS')
 		else: 
-			print ('Acutal Result: ' + str(actual) + ' Status: FAIL')
+			print ('Acutal Result: ' + str(issued) + ' Status: FAIL')
 
 	# Invalid width.
 	# INPUT: w=50
-	# EXPECTED: 7.74*10^-5	
-	def test_signalInterval_normal():
-		expected = 7.74*10**-5
+	# EXPECTED: 7.41*10^-5	
+	def test_signalInterval_normal(self):
+		expected = 7.407*10**-5
 	
 		conversion = ImageConversion()
-		fresult = float(conversion.signalInterval(-5))
-		actual = round(fresult,7)
-		if(expected == actual):
+		w = 50
+		fresult = float(conversion.signalInterval(w))
+		issued = round(fresult,8)
+		if(expected == issued):
 		
-			print ('Acutal Result: ' + str(actual) + ' Status: PASS')
+			print ('Acutal Result: ' + str(issued) + ' Status: PASS')
 		else: 
-			print ('Acutal Result: ' + str(actual) + ' Status: FAIL')
+			print ('Acutal Result: ' + str(issued) + ' Status: FAIL')
 			
 	# Invalid width.
 	# INPUT: w=300
 	# EXPECTED: 1.48*10^-5	
-	def test_signalInterval_GmaxW():
+	def test_signalInterval_GmaxW(self):
 		expected = 1.48*10**-5
-		
+
+		w= 300
 		conversion = ImageConversion()
-		actual = round(fresult,7)
-		if(expected == actual):
+		fresult = float(conversion.signalInterval(w))
+		issued = round(fresult,7)
+		if(expected == issued):
 		
-			print ('Acutal Result: ' + str(actual) + ' Status: PASS')
+			print ('Acutal Result: ' + str(issued) + ' Status: PASS')
 		else: 
-			print ('Acutal Result: ' + str(actual) + ' Status: FAIL')
+			print ('Acutal Result: ' + str(issued) + ' Status: FAIL')
 
 	# ----- signalInterval(width) test cases END -----
 
 TestCases = ImgConvUnitTests()
 
 #TEST CASES
-print("Test case 1: "),
-TestCases.test_thumbNail_normal()
-print("\n");
+#print("Test case 1: "),
+#TestCases.test_thumbNail_normal()
+#print("\n");
 
 print("Test case 2: "),
-TestCases.test_thumbNail_invalidFormat())
+TestCases.test_thumbNail_invalidFormat()
 print("\n");
 
 
