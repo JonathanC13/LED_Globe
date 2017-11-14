@@ -25,10 +25,9 @@ class ImgConvUnitTests:
                 loadCreated = load_image("testCreated.jpg")
 
                 thumbfile = conversion.thumbNail(loadCreated)
-                thumb = load_image(str(thumbfile))
-                print(str(thumb.get_height()))
+                thumb = load_image(thumbfile)
+
                 if (thumb.get_width() <= 48 and thumb.get_height() <= 48):
-                        print(str(thumb.getheight))
                         print ("Pass")
                 else:
                         print("Fail")
@@ -422,9 +421,9 @@ class ImgConvUnitTests:
 TestCases = ImgConvUnitTests()
 
 #TEST CASES
-#print("Test case 1: "),
-#TestCases.test_thumbNail_normal()
-#print("\n");
+print("Test case 1: "),
+TestCases.test_thumbNail_normal()
+print("\n");
 
 print("Test case 2: "),
 TestCases.test_thumbNail_invalidFormat()

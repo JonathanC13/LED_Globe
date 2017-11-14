@@ -19,20 +19,20 @@ class ImageConversion:
                 # hori of 0 will result in an ValueError down the line
                 
 		size = hori, 48
-		infile = img
+		infile = img.get_filename()
                 
-		for infile in sys.argv[1:]:
-			file = os.path.splitext(infile)[0]
-			file = file + "thumbnail.jpg"
-			try:
-				im = PIL.Image.open(infile)
-				
-				im.thumbnail(size, PIL.Image.LANCZOS)
+		#for infile in sys.argv[1:]:
+		file = os.path.splitext(os.path.basename(infile))[0]
+		file = file + "thumbnail.jpg"
+		try:
+			im = PIL.Image.open(infile)
+		
+			im.thumbnail(size, PIL.Image.LANCZOS)
                                 # hori of 0 will result in an Type error
 				
-				im.save(file, "JPEG")
-			except:
-                               print ("Unexpected error ", sys.exc_info()[0])
+			im.save(file, "JPEG")
+		except:
+                        print ("Unexpected error ", sys.exc_info()[0])
 				#print ("cannot create thumbnail for '%s'" % infile)
 				
                 return file
