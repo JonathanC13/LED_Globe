@@ -1,0 +1,35 @@
+Distributed systems tests
+
+test case 1: Job 1 desc and job 2 swap. CHANGE Request only, no additional operations
+	1. Client sends job request, waits for ack
+	2. server does the setup for that job, Need to make stub files it calls in specific directory
+	3. After set up server sends ack to client
+	4. client closes
+	5. allow server to time out
+
+	To confirm worked: 
+		Verbose on both sides
+		Sent data is written to the specified file
+
+test case 2: Add to description part of test "Then client sends -1 in a data packet to signal the server it is the final data packet.
+	1. Client sends job request, waits for ack
+	2. Server does the setup up then acks to the client, need stub files
+	3. client closes
+	4. allow server to time out
+
+	To confirm worked: 
+		Verbose on both sides
+		Sent data is written to the specified file
+
+If job 1 then time out can be longer with same number of tries. CHANGE desc to say either timeout or -1 will close server socket.
+test case 3: desc: Time out on client side. Mock sends test values one by one in data packets. To stop the server from inifinitly waiting, the mock sends -1 to let the server know it is the last transmission so it can close the socket and let the thread die.
+	1. Client sends job request, waits for ack
+	2. server does the setup for that job, Need to make stub files it calls in specific directory
+	3. After set up server sends ack to client
+	4. Client sends a data packet with test values, e.g. 25, -1, writes to the stub always reply with ack
+	5. -1 will signal last transmission
+
+test case 4:
+	1. send <512 bytes in data packet.
+	2. server writes then closes socket
+	3. client closes.
