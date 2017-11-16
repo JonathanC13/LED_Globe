@@ -1,5 +1,6 @@
 from ImageConversion import ImageConversion
 from Cimpl import *
+import os, sys
 
 import PIL as pillow
 import PIL.Image

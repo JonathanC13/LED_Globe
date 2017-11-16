@@ -1,17 +1,22 @@
-import RPi.GPIO as GPIO
+# When testing with stub, comment GPIO.
+#import RPi.GPIO as GPIO
+
 import time
 import argparse
+import os, sys
 
 from MotorStub import *
 
-#GPIO setup commented out when testing with stub
-GPIO.setmode(GPIO.BOARD)
+# When testing with stub, comment GPIO and pwm functions.
+#GPIO.setmode(GPIO.BOARD)
 
-GPIO.setup(12, GPIO.OUT)
+#GPIO.setup(12, GPIO.OUT)
 
-pwm = GPIO.PWM(12, 1000) # Arbitrary
+#pwm = GPIO.PWM(12, 1000) # Arbitrary
 
-pwm.start(0) 
+#pwm.start(0) 
+
+# -----
 
 class runDC:
 
@@ -24,10 +29,10 @@ class runDC:
         rpsMAX = 141
         dcV = 9        
         
-		if(RPS < 0):
-			RPS = 0
-		else if (RPS >= 141):
-			RPS = 141
+	if(RPS < 0):
+	    RPS = 0
+	elif (RPS >= 141):
+	    RPS = 141
 		
         #(Theo aV/Vmax) x rpsMAX = desired rps
         
@@ -36,68 +41,92 @@ class runDC:
         duty = (float(RPS)*100.0/float(rpsMAX))
         
         
-        print ("DC motor will reach " + str(RPS) + " RPS momentarily")
-        print ("Duty cycle applied: " + str(duty) + "%")
+        #print ("DC motor will reach " + str(RPS) + " RPS momentarily")
+        #print ("Duty cycle applied: " + str(duty) + "%")
         
         #Theo average V = Vmax x duty
         Tav = float(dcV * (duty/100.0))
         
 
-        print ("Theoretical aveage voltage applied: " + str(Tav) + "V, of max " + str(dcV) + "V")
+        #print ("Theoretical aveage voltage applied: " + str(Tav) + "V, of max " + str(dcV) + "V")
 
         #duty-pwm relation equation. duty = (pwm x 100)/T
 
         return duty
 
-    # @param: dutyLim - Calculated duty cycle from user chosen RPS (revolutions per second
-    def applyDuty(self):
-        
-		#Stub
-		#mStub = motorStub()
-		#mIn = motorInputs()
-		
+    # For testing added parameters: inRPS and stub instance
+    def applyDuty(self, inRPS, stubInst):
+
+	stub = stubInst
         try:
             while True:
                 #RPS read from a text file that is written to by the TFTP server.
-				
-				#Input
-				#RPS changes
-				#RPS = mIn.changeRPS()
-				
-                f = open('/home/pi/Desktop/RPS','r')
-                RPS = f.read()
-                if (RPS == -1):
-                    break
-				else if(RPS < 0):
-					RPS = 0
-				else if (RPS >= 141):
-					RPS = 141
 		
-				fRPS = float(RPS)
-                print(RPS)
-                f.close()
+		#Input Tests ----
+		#RPS changes
+		RPS = inRPS
+                # ---
+
+		# Actual Inputs ---	
+                #f = open('/home/pi/Desktop/RPS','r')
+                #RPS = f.read()
+                # -----
+                
+                if (RPS == -1):
+                    fRPS = 0
+
+                    dutyCalc = self.userRPStoDuty(fRPS)
+                    
+                    #Stub for motor ---
+                    stub.stubPWM(dutyCalc)
+                    # ---
+
+                    # Actual motor control ---
+                    #pwm.ChangeDutyCycle(dutyCalc)
+                    # ---
+                    
+                    break
+		elif(RPS < 0):
+		    RPS = 0
+		elif (RPS >= 141):
+		    RPS = 141
+		
+		fRPS = float(RPS)
+		
+		# -----
+                #f.close()
+                # ----
 		
                 dutyCalc = self.userRPStoDuty(fRPS)
+
+		#Stub for motor ---
+		stub.stubPWM(dutyCalc)
+                # ---
                 
-				#Stub
-				#mStub.stubPWM(dutyCalc, fRPS)
-				
-                pwm.ChangeDutyCycle(dutyCalc)
+		# Actual motor control ---
+                #pwm.ChangeDutyCycle(dutyCalc)
+                # ---
                 time.sleep(2)
 
                 #break and end after 10 seconds
                 #time.sleep(10)
-                #break
+                
+                # for testing, break after one input
+                break
                 
         except KeyboardInterrupt:
             pass
-		except ValueError:
-			print "Could not convert data to an integer."
-		except:
-			print "Unexpected error:", sys.exc_info()[0]
-        pwm.stop()
+	except ValueError:
+	    print ("Could not convert data to an integer.")
+	except:
+	    print ("Unexpected error:", sys.exc_info()[0])
 
-        GPIO.cleanup()
+	# When testing with stub, comment GPIO and pwm functions.
+        #pwm.stop()
+
+        #GPIO.cleanup()
+
+        # -----
         return;
         
 
@@ -117,8 +146,13 @@ class runDC:
  #   print("true")
 
 #---
-#-- main
-run = runDC()
+#-- main -- When testing comment out ---
+#run = runDC()
+#---
+
+# --- if receive input from command line
 #applyD = run.userRPStoDuty(userArg)
 
-run.applyDuty()
+# -- When testing comment out ---
+#run.applyDuty()
+# ---
