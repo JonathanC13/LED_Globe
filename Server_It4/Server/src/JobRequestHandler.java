@@ -36,6 +36,8 @@ public class JobRequestHandler {
 	
 	int fileNameLen, modeLen;
 	
+	int storeJobCode;
+	
 	// Numbered jobs that this device has direct control of.
 	static final int JOB_1 = 1;		// i.e. run DC motor
 	//static final int JOB_2 = 2;		// i.e. LED pattern and signal interval to arduino, then execute and sever connection.
@@ -97,9 +99,14 @@ public class JobRequestHandler {
 					//It_3. Network error starts
 					
 					try {
-						rcvHanlder.transferSocket.setSoTimeout(5000);
-						//3. poll for user input and then write it to RPS.txt
-						rcvHanlder.transferSocket.receive(packet);
+						if(storeJobCode == 1){	// Longer time out for DC motor inputs since user controled, say 10 seconds of inactivity , close socket
+							rcvHanlder.transferSocket.setSoTimeout(10000);
+							rcvHanlder.transferSocket.receive(packet);
+						}
+						if(storeJobCode == 2){ //Stream of data for job 2.
+							rcvHanlder.transferSocket.setSoTimeout(5000);
+							rcvHanlder.transferSocket.receive(packet);
+						}
 						
 						if(packet.getLength() > maxByte){
 							
@@ -115,22 +122,24 @@ public class JobRequestHandler {
 					} catch (SocketTimeoutException ex) {
 						
 						//Wait for the package for 5 second. Long enough, quit.
-						System.out.println("WRQ: Timedout! " + ex.getMessage() + ". Deleting incomplete file.");
+						System.out.println("WRQ: Timedout! " + ex.getMessage() + ". File incomplete.");
 						
 						closeBufferedOutputStream();
 						closeFileOutputStream();
 						
-						if(new File(strgFileName).delete()){
-							System.out.println("\nIncomplete file deleted:" + strgFileName);
-						} else {
-							System.out.println("\nFailed to delete incomplete file.");
-						}
+						// Not deleting the file if incomplete transfer since executing the the LED program will use the same file.
+						// Just the data will be overwritten in the next request.
+						//if(new File(strgFileName).delete()){
+						//	System.out.println("\nIncomplete file deleted:" + strgFileName);
+						//} else {
+						//	System.out.println("\nFailed to delete incomplete file.");
+						//}
 						
 			        	break;
 					}
 					
 					
-					InetAddress incomingIpAddress = packet.getAddress();
+				InetAddress incomingIpAddress = packet.getAddress();
 		        	int incomingPort = packet.getPort();
 		        	
 		        	// Checks incoming packet address and port.
@@ -215,7 +224,7 @@ public class JobRequestHandler {
 				        
 				        rcvHanlder.printContents(packet);
 				        
-			        	//write to file
+			        	//write to file the contents of the data packet
 				        byte[] wrBuf = Arrays.copyOfRange(dataBuf, 4, receivedPackageDataLen);		        
 			        	Boolean wrResultOk = WriteToFile(wrBuf);
 			        	if(!wrResultOk) {
@@ -239,28 +248,51 @@ public class JobRequestHandler {
 			        	
 				        expectedBlock = curBlock + 1;
 				        
-				        // empty data bytes, then quit
-			        	if(receivedPackageDataLen == 4) {
-			        		/// change, to continue poll
-			        		//done
-	
-			        		bufferedOutputStream.flush();
-			    			closeBufferedOutputStream();
-			    			closeFileOutputStream();		        			
-			        		try {
-								TimeUnit.SECONDS.sleep(1);
-								
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			        		
-			        		// write -1 to RPS.txt so runDC.py breaks its loop and ends properly.
-			        		byte[] end = new byte[] {-1};
-			        		Boolean ending = WriteToFile(wrBuf);
-			        		System.out.println("End value written to RPS.txt: " + ending);
-			        		
-			        		//break loop that polls for user input
-			        		break;
+					// This section checks if it was the final packet or not.
+					if(storeJobCode == 1){
+				        // empty data bytes, then quit this is for job 1
+						if(receivedPackageDataLen == 4) {
+							//done
+							// No value in the data packet to write, so it indicates the user is done.
+							bufferedOutputStream.flush();
+							closeBufferedOutputStream();
+							closeFileOutputStream();		        			
+							try {
+									TimeUnit.SECONDS.sleep(1);
+
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+
+							// write -1 to RPS.txt so runDC.py breaks its loop and ends properly.
+							byte[] end = new byte[] {-1};
+							Boolean ending = WriteToFile(wrBuf);
+							System.out.println("End value written to RPS.txt: " + ending);
+
+							//break loop that waits for user input before long time out.
+							break;
+						}
+					
+					if(storeJobCode == 2){
+						if(receivedPackageDataLen < 516) {
+							//done
+
+							bufferedOutputStream.flush();
+							closeBufferedOutputStream();
+							closeFileOutputStream();		        			
+							try {
+									TimeUnit.SECONDS.sleep(1);
+
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+
+							// Call function to execute LED program for Arduino.
+							
+
+							
+							break;
+						}
 			        	}	 
 		        	}
 
@@ -284,12 +316,13 @@ public class JobRequestHandler {
 		
 	}
 	
+	// First package processing for packet information
 	Boolean processFirstPackage() throws IOException {
 		Boolean result = false;
 		
 		try {
 			//the IP address and port number on the remote host from which the datagram was received.
-	        remoteIpAddress = pkg.getAddress();
+	        	remoteIpAddress = pkg.getAddress();
 			remotePort = pkg.getPort(); 	
 			
 			byte[] dataBuf = pkg.getData();
@@ -299,8 +332,6 @@ public class JobRequestHandler {
 			// 2 bytes | 2 bytes | 
 			// Opcode  | Job code| 	
 			int JobCode = getJobCode(dataBuf);
-
-			// Find out the behaviour of the web service transfer
 			
 			boolean jobDONE = false;
 			//boolean receivedACK = false;
@@ -320,9 +351,9 @@ public class JobRequestHandler {
 				
 			}	
 			
-			// Entering this 'if' means that the job was complete either from the leader or the follower. Send main ACK.
+			
 			if(jobDONE){
-				//send ACK packet if the job has been done
+				//send ACK packet if the setup for the job was successful
 				
 				sendBuf[0] = 0;	//ACK high byte
 				sendBuf[1] = 4;	//ACK low byte
@@ -360,6 +391,7 @@ public class JobRequestHandler {
 	}
 	
 	public int getJobCode(byte[] b){
+		
 		return ((b[3] << 8) & 0xff00) + (b[4] & 0xff);
 		
 	}
@@ -429,15 +461,17 @@ Back to jrqResponseHandler to handle user inputs.
 			
 			if (file.exists()) {	
 				
+				fileOutputStream = new FileOutputStream(file, false);	//false means overwrite
+				bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
 				result = true;
 				
 			} 
 			else if (!file.exists() && create){
 				// create new file with the name
-				result = file.createNewFile();
+				result = file.createNewFile();	//should equal true if created properly
 				fileOutputStream = new FileOutputStream(file, false);	//false means overwrite
 				bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
-				result = true;
+				//result = true;
 			}
 		}
 		catch (IOException ex) {	//create
@@ -514,7 +548,7 @@ Back to jrqResponseHandler to handle user inputs.
 	
 	// test job directly.
 	boolean doJob(int JobCode){
-		
+		storeJobCode = JobCode;
 		switch(JobCode) {
 		case JOB_1:
 			return doJob1();
