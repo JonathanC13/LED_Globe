@@ -4,7 +4,11 @@ from MotorStub import *
 class motorOracle:
 
         # ----- userRPStoDuty START -----
+        # Input RPS to userRPStoDuty and compare the expected duty
 
+        # Input negative value
+        # Input: -50
+        # Expected: 0
         def test_userRPStoDutyNeg(self):
                 expected = 0
                 
@@ -15,7 +19,9 @@ class motorOracle:
                         print("Pass")
                 else:
                         print("Fail")
-                
+        # Input zero value
+        # Input: 0
+        # Expected: 0       
         def test_userRPStoDutyZero(self):
                 expected = 0
                 
@@ -26,7 +32,10 @@ class motorOracle:
                         print("Pass")
                 else:
                         print("Fail")
-                
+                        
+        # Input nominal value
+        # Input: 50
+        # Expected: 35.46          
         def test_userRPStoDutyNorm(self):
                 expected = 35.46
                 
@@ -38,7 +47,10 @@ class motorOracle:
                         print("Pass")
                 else:
                         print("Fail")
-                
+                        
+        # Input where the value is the max boundary.
+        # Input: 141
+        # Expected: 100        
         def test_userRPStoDutyMax(self):
                 expected = 100
                 
@@ -49,7 +61,10 @@ class motorOracle:
                         print("Pass")
                 else:
                         print("Fail")
-                
+                        
+        # Input a value larger than the max
+        # Input: 200
+        # Expected: 100         
         def test_userRPStoDutyLarge(self):
                 expected = 100
                 
@@ -60,7 +75,10 @@ class motorOracle:
                         print("Pass")
                 else:
                         print("Fail")
-                
+                        
+        # Input an input type that is not a proper value type like char
+        # Input: aaa
+        # Expected: NameError exception        
         def test_userRPStoDutyInvalid(self):
                 
                 DC = runDC()
@@ -76,8 +94,13 @@ class motorOracle:
 
         # ----- userRPStoDuty END -----
 
-         # ----- Stub Tests START -----
+        # ----- Stub Tests START -----
 
+        # Driver provides the input and creates the stub for applyDuty. Then compares the output to the expected.
+
+        # Input value that is negative
+        # Input: -50
+        # Expected: 0
         def test_applyDutyNeg(self):
                 a = -50
             
@@ -97,7 +120,9 @@ class motorOracle:
                         print "Fail" 
                        # print "Duty from runDC, " + str(actualDuty) + ", is NOT equal to calculated duty using RPS, "+ str(expectedDuty)
 
-
+        # Input value that is -1, which is the quitting condition
+        # Input: -1
+        # Expected: 0
         def test_applyDutyNegOne(self):
                 a = -1
                 mStub = motorStub()     #Stub
@@ -116,6 +141,9 @@ class motorOracle:
                         print "Fail"
                         #print "Duty from runDC, " + str(actualDuty) + ", is NOT equal to calculated duty using RPS, "+ str(expectedDuty)
 
+        # Input value that is 0
+        # Input: 0
+        # Expected: 0
         def test_applyDutyZero(self):
                 a = 0
                 
@@ -136,6 +164,9 @@ class motorOracle:
                     print "Fail"
                     #print "Duty from runDC, " + str(actualDuty) + ", is NOT equal to calculated duty using RPS, "+ str(expectedDuty)
 
+        # Input nominal value
+        # Input: 75
+        # Expected: 0
         def test_applyDutyNorm(self):
                 a = 75
             
@@ -158,6 +189,9 @@ class motorOracle:
                         print "Fail"
                         #print "Duty from runDC, " + str(actualDuty) + ", is NOT equal to calculated duty using RPS, "+ str(expectedDuty)
 
+        # Input max boundary value
+        # Input: -50
+        # Expected: 0
         def test_applyDutyMax(self):
                 a = 141
             
@@ -177,6 +211,9 @@ class motorOracle:
                         print "Fail"
                         #print "Duty from runDC, " + str(actualDuty) + ", is NOT equal to calculated duty using RPS, "+ str(expectedDuty)
 
+        # Input value larger than max value
+        # Input: -50
+        # Expected: 0
         def test_applyDutyLarge(self):
                 a = 200
                 mStub = motorStub()     #Stub
