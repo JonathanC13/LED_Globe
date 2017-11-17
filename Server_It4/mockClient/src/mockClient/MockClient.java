@@ -29,10 +29,12 @@ public class MockClient {
 		System.out.print("Test Case 1: ");
 		MockClient test1 = new MockClient();
 		test1.mockClient(1,"LOCAL","end");
+		System.out.println("Test Case 1 END -----");
 		
-		System.out.print("Test Case 3: ");
+		System.out.print("Test Case 2: ");
 		MockClient test3 = new MockClient();
 		test3.mockClient(2,"LOCAL","end");
+		System.out.println("Test Case 2 END -----");
 	}
 	
 	private void mockClient(int jobNumber, String ip, String fileTrans){
@@ -126,7 +128,8 @@ public class MockClient {
 			int opCode = getPkgOpCode(dataBuf);
 			if( isAckPackage(dataBuf) && (blk==expectedBlock) ) {
 				receivedPackageDataLen = packetRe.getLength();
-	        	System.out.println("RRQ: Received ACK OpCode:" + opCode + ", Block:" + blk + ", Packet Length:" + receivedPackageDataLen);
+	        	System.out.println("Client: Received ACK OpCode:" + opCode + ", Block:" + blk + ", Packet Length:" + receivedPackageDataLen);
+	        	System.out.println("From:          remote port(remote TID):" + packet.getPort() + ", remote IP: " + packet.getAddress());
 			}
 		}
 		shutdown();
