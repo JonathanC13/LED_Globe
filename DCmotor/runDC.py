@@ -28,11 +28,10 @@ class runDC:
         #current DC motor: #:29DCM28 - 8500 RPM. 141 RPSec @9V (no load)
         rpsMAX = 141
         dcV = 9        
-        
-	if(RPS < 0):
-	    RPS = 0
-	elif (RPS >= 141):
-	    RPS = 141
+        if(RPS < 0):
+            RPS = 0
+        elif (RPS >= 141):
+            RPS = 141
 		
         #(Theo aV/Vmax) x rpsMAX = desired rps
         
@@ -57,21 +56,21 @@ class runDC:
     # For testing added parameters: inRPS and stub instance
     def applyDuty(self, inRPS, stubInst):
 
-	stub = stubInst
+        stub = stubInst
         try:
             while True:
-                #RPS read from a text file that is written to by the TFTP server.
-		
+			#RPS read from a text file that is written to by the TFTP server.
+	
 		#Input Tests ----
 		#RPS changes
-		RPS = inRPS
+                RPS = inRPS
                 # ---
 
 		# Actual Inputs ---	
-                #f = open('/home/pi/Desktop/RPS','r')
-                #RPS = f.read()
-                # -----
-                
+		#f = open('/home/pi/Desktop/RPS','r')
+		#RPS = f.read()
+		# -----
+		
                 if (RPS == -1):
                     fRPS = 0
 
@@ -86,26 +85,25 @@ class runDC:
                     # ---
                     
                     break
-		elif(RPS < 0):
-		    RPS = 0
-		elif (RPS >= 141):
-		    RPS = 141
-		
-		fRPS = float(RPS)
-		
+                elif(RPS < 0):
+                    RPS = 0
+                elif (RPS >= 141):
+                    RPS = 141
+
+                fRPS = float(RPS)
+				
 		# -----
                 #f.close()
                 # ----
-		
                 dutyCalc = self.userRPStoDuty(fRPS)
 
-		#Stub for motor ---
-		stub.stubPWM(dutyCalc)
-                # ---
-                
-		# Actual motor control ---
-                #pwm.ChangeDutyCycle(dutyCalc)
-                # ---
+				#Stub for motor ---
+                stub.stubPWM(dutyCalc)
+						# ---
+						
+				# Actual motor control ---
+						#pwm.ChangeDutyCycle(dutyCalc)
+						# ---
                 time.sleep(2)
 
                 #break and end after 10 seconds
@@ -116,10 +114,10 @@ class runDC:
                 
         except KeyboardInterrupt:
             pass
-	except ValueError:
-	    print ("Could not convert data to an integer.")
-	except:
-	    print ("Unexpected error:", sys.exc_info()[0])
+        except ValueError:
+            print ("Could not convert data to an integer.")
+        except:
+            print ("Unexpected error:", sys.exc_info()[0])
 
 	# When testing with stub, comment GPIO and pwm functions.
         #pwm.stop()

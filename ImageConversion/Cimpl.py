@@ -18,8 +18,8 @@ deleted.
 import os
 import math
 
-from Tkinter import *
-import tkFileDialog
+from tkinter import *
+#import tkFileDialog
 import PIL.Image
 import PIL.ImageTk
 
@@ -209,8 +209,8 @@ class Image(object):
         width = self.get_width()
         height = self.get_height()
 
-        for y in xrange(0, height):
-            for x in xrange(0, width):
+        for y in range(0, height):
+            for x in range(0, width):
                 col = Color._make(self.pixels[x, y])
                 yield x, y, col
 
@@ -519,4 +519,4 @@ def choose_file():
     root.destroy() # Do we need to do this?
     return path
 
-print release
+print (release)

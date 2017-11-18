@@ -32,10 +32,10 @@ class ImageConversion:
 				
 			im.save(file, "JPEG")
 		except:
-                        print ("Unexpected error ", sys.exc_info()[0])
-				#print ("cannot create thumbnail for '%s'" % infile)
+			print ("Unexpected error ", sys.exc_info()[0])
+			#print ("cannot create thumbnail for '%s'" % infile)
 				
-                return file
+		return file
 
 	def calcHori(self, width, height):
 		if(width <= 0 or height <= 0):
@@ -57,7 +57,7 @@ class ImageConversion:
 			elif (hor < 1):
 				hor = -1
 
-			return hor
+		return hor
 				
 	def black_and_white(self, img):
 		
@@ -111,13 +111,13 @@ class ImageConversion:
 		for y in range(0,numrows):
 			print (' ')
 			for x in range(0, numcols):
-                                chk = matrix[x][y]
+				chk = matrix[x][y]
 				if (chk != 0 and chk !=1):
 					validBit = False
 					break
                                 
-				print (matrix[x][y]),
-                        if(validBit == False):
+				print (matrix[x][y] , end="")
+			if(validBit == False):
 				print ("Contains invalid value that is not a 0 or 1: " + str(matrix[x][y]) + ", Pass")
 				break
 		

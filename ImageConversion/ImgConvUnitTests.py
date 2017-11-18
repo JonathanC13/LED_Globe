@@ -18,22 +18,22 @@ class ImgConvUnitTests:
 	def test_thumbNail_normal(self):
 	
 		conversion = ImageConversion()
-		
+
 		color = create_color(100,150,80)
-                created = create_image(200,200,color)
-                save_as(created, "testCreated.jpg")
+		created = create_image(200,200,color)
+		save_as(created, "testCreated.jpg")
 
-                loadCreated = load_image("testCreated.jpg")
+		loadCreated = load_image("testCreated.jpg")
 
-                thumbfile = conversion.thumbNail(loadCreated)
-                thumb = load_image(thumbfile)
+		thumbfile = conversion.thumbNail(loadCreated)
+		thumb = load_image(thumbfile)
 
-                if (thumb.get_width() <= 48 and thumb.get_height() <= 48):
-                        print ("Pass")
-                else:
-                        print("Fail")
-                
-	
+		if (thumb.get_width() <= 48 and thumb.get_height() <= 48):
+				print ("Pass")
+		else:
+				print("Fail")
+		
+
 	# Load image with invalid file format
         # Input: Test.pdf
         # Expected: NameError from Cimpl, when attempting to call get_width
@@ -43,10 +43,10 @@ class ImgConvUnitTests:
 		actual = ""
 		try:
                         actual = conversion.thumbNail(Test.pdf)         # IO error
-                except NameError:
-                        print ("Pass")
-                except:
-                        print ("Unexpected error ", sys.exc_info()[0])
+		except NameError:
+				print ("Pass")
+		except:
+				print ("Unexpected error ", sys.exc_info()[0])
                 
 
 	# Load image with empty file
@@ -57,19 +57,19 @@ class ImgConvUnitTests:
 
 		black = create_color(0,0,0)
 		try:
-                        testIMG = create_image(0,0,black)          # create test image. Error will be from this function call.
-                        
-                except ValueError:
-                        print ("Pass | "),
-                except:
-                        print ("--1--, Unexpected error ", sys.exc_info()[0])
+				testIMG = create_image(0,0,black)          # create test image. Error will be from this function call.
+				
+		except ValueError:
+				print ("Pass | ", end="")
+		except:
+				print ("--1--, Unexpected error ", sys.exc_info()[0])
 
-                try:    
-                        actual = conversion.thumbNail(testIMG)
-                except UnboundLocalError:
-                        print ("Pass")
-                except:
-                        print ("--2--, Unexpected error ", sys.exc_info()[0])
+		try:    
+				actual = conversion.thumbNail(testIMG)
+		except UnboundLocalError:
+				print ("Pass")
+		except:
+				print ("--2--, Unexpected error ", sys.exc_info()[0])
                         
 	# ----- thumbNail(img) test cases END -----
 	
@@ -168,24 +168,24 @@ class ImgConvUnitTests:
         # Expected: Shows all black image
 	def test_black_and_white_normal(self):
 
-                NEARblack = create_color(80,50,80)
-                NEARblackIMG = create_image(100,100,NEARblack)          # create test image , purplish
-                
+		NEARblack = create_color(80,50,80)
+		NEARblackIMG = create_image(100,100,NEARblack)          # create test image , purplish
+		
 		conversion = ImageConversion()
 		conversion.black_and_white(NEARblackIMG)
 
 		binary = True
 		#show(NEARblackIMG)
-                for j in range (0,100):
-                        for i in range(0,100):
-                                chk = get_color(NEARblackIMG, i, j)
-                                if( chk != (0,0,0) ):
-                                        binary = False
-                                        print("Fail, not converted to black. co-ord: " + str(i) +", " + str(j))
-                                        break
-                        if (binary == False):
-                                break
-                print("Converted image contains only black, Pass")
+		for j in range (0,100):
+				for i in range(0,100):
+						chk = get_color(NEARblackIMG, i, j)
+						if( chk != (0,0,0) ):
+								binary = False
+								print("Fail, not converted to black. co-ord: " + str(i) +", " + str(j))
+								break
+				if (binary == False):
+						break
+		print("Converted image contains only black, Pass")
 		
 
         # Load image with invalid file format
@@ -194,34 +194,34 @@ class ImgConvUnitTests:
 	def test_black_and_white_invalidFormat(self):
 		conversion = ImageConversion()
 		try:
-                        conversion.black_and_white(Test.pdf)
-                except NameError:
-                        print ("Pass")
-                except:
-                        print ("Unexpected error ", sys.exc_info()[0])
-                
+				conversion.black_and_white(Test.pdf)
+		except NameError:
+				print ("Pass")
+		except:
+				print ("Unexpected error ", sys.exc_info()[0])
+		
         # Load image with empty file
         # Input: created image file with w =0 and h = 0
         # Expected: ValueError from Cimpl, image of (0,0) invalid.
 	def test_black_and_white_emptyImg(self):
 		conversion = ImageConversion()
 
-                black = create_color(0,0,0)
-                try:
-                        testIMG = create_image(0,0,black)          # create test image. Error will be from this function call.
-                except ValueError:
-                        print("Pass | "),
-                except:
-                        print ("--1--, Unexpected error ", sys.exc_info()[0])  
+		black = create_color(0,0,0)
+		try:
+			testIMG = create_image(0,0,black)          # create test image. Error will be from this function call.
+		except ValueError:
+			print("Pass | "),
+		except:
+			print ("--1--, Unexpected error ", sys.exc_info()[0])  
 
-                try:
-                        conversion.black_and_white(testIMG)
-                except UnboundLocalError:
-                        print ("Pass")
-                except:
-                        print ("--2--, Unexpected error ", sys.exc_info()[0])
-                        
-                
+		try:
+			conversion.black_and_white(testIMG)
+		except UnboundLocalError:
+			print ("Pass")
+		except:
+			print ("--2--, Unexpected error ", sys.exc_info()[0])
+				
+		
 	# ----- black_and_while(img) test cases END -----
 
 	# ----- bitArray(matrix) test cases START -----
@@ -231,28 +231,28 @@ class ImgConvUnitTests:
 	# Expected: return bit array of all 0s
 	def test_bitArray_normal(self):
 
-                black = create_color(0,0,0)
-                blackIMG = create_image(100,100,black)          # create test image
+		black = create_color(0,0,0)
+		blackIMG = create_image(100,100,black)          # create test image
                 
 		conversion = ImageConversion()  
 
 		actual = conversion.bitArray(blackIMG)          # stores returned bit array
 
-                r, c = 100, 100
+		r, c = 100, 100
 
 		bitMatrix = [[0 for h in range(r)] for w in range(c)]
-                allBlack = True
+		allBlack = True
 		
 		for j in range(0,r):
 			for i in range(0, c):
 				if (actual[i][j] != 0):
-                                        allBlack =False
-                                        print("Fail, not 0 at: " + str(i) +", " + str(j))
-                                        break
-                        if(allBlack == False):
-                                break
-
-                print("Pass")
+					allBlack =False
+					print("Fail, not 0 at: " + str(i) +", " + str(j))
+					break
+			if(allBlack == False):
+				break
+		if allBlack != False:
+			print("Pass")
 
 	# Load file with invalid image file format
 	# INPUT: Test.pdf
@@ -262,34 +262,34 @@ class ImgConvUnitTests:
 		conversion = ImageConversion()
 
 		try:
-                        testArray = conversion.bitArray(Test.pdf)
-                except NameError:
-                        print ("Pass")
-                except:
-                        print ("Unexpected error ", sys.exc_info()[0])
+			testArray = conversion.bitArray(Test.pdf)
+		except NameError:
+			print ("Pass")
+		except:
+			print ("Unexpected error ", sys.exc_info()[0])
 
         # Load file with invalid image file format
 	# INPUT: Create image with 0 width and 0 height
 	# Expected: ValueError. I think the error is thrown from Cimpl due to create_image here in this case, image of (0,0) invalid.
 	def test_bitArray_emptyImg(self):
 
-                black = create_color(0,0,0)
+		black = create_color(0,0,0)
 
-                try:
-                        testIMG = create_image(0,0,black)          # create test image. Error will be from this function call.
-                except ValueError:
-                        print ("Pass | "),
-                except:
-                        print ("--1--, Unexpected error ", sys.exc_info()[0])
+		try:
+			testIMG = create_image(0,0,black)          # create test image. Error will be from this function call.
+		except ValueError:
+			print ("Pass | "),
+		except:
+			print ("--1--, Unexpected error ", sys.exc_info()[0])
                 
 		conversion = ImageConversion()
 
-                try:
-        		testArray = conversion.bitArray(testIMG)        
-                except UnboundLocalError:
-                        print("Pass")
-                except:
-                        print ("--2--, Unexpected error ", sys.exc_info()[0])
+		try:
+			testArray = conversion.bitArray(testIMG)
+		except UnboundLocalError:
+			print("Pass")
+		except:
+			print ("--2--, Unexpected error ", sys.exc_info()[0])
                         
 	# ----- bitArray(matrix) test cases END -----
 	
@@ -329,10 +329,10 @@ class ImgConvUnitTests:
 		r, c = 49, 2
 		testMatrix = [[0 for h in range(r)] for w in range(c)]
 
-                for j in range(0,r):
-                	for i in range(0, c):
-                                testMatrix[i][j] = 0
-                                
+		for j in range(0,r):
+			for i in range(0, c):
+						testMatrix[i][j] = 0
+						
 		conversion = ImageConversion()
 		conversion.printBitArray(testMatrix)
 
@@ -343,10 +343,10 @@ class ImgConvUnitTests:
 		r, c = 10, 251
 		testMatrix = [[0 for h in range(r)] for w in range(c)]
 
-                for j in range(0,r):
-                	for i in range(0, c):
-                                testMatrix[i][j] = 0
-		
+		for j in range(0,r):
+			for i in range(0, c):
+						testMatrix[i][j] = 0
+
 		conversion = ImageConversion()
 		conversion.printBitArray(testMatrix)
 
