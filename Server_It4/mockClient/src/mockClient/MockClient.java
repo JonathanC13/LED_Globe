@@ -1,4 +1,6 @@
 package mockClient;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.*;
 import java.nio.file.Path;
@@ -23,6 +25,14 @@ public class MockClient {
 	String strgFileName;
 	Path filePath;
 	
+	boolean timeToBreak = false;
+	
+	BufferedInputStream bufferedInputStream = null;
+    FileInputStream  fileInputStream= null;
+    
+    public Boolean continueRun = true;
+	
+    int sendLen;
 	int expectedBlock;
 
 	public static void main(String[] args){
@@ -32,14 +42,26 @@ public class MockClient {
 		System.out.println("Test Case 1 END -----");
 		
 		System.out.print("Test Case 2: ");
-		MockClient test3 = new MockClient();
-		test3.mockClient(2,"LOCAL","end");
+		MockClient test2 = new MockClient();
+		test2.mockClient(2,"LOCAL","end");
 		System.out.println("Test Case 2 END -----");
+		
+		System.out.print("Test Case 3: ");
+		MockClient test3 = new MockClient();
+		test3.mockClient(1,"LOCAL","/home/path");
+		System.out.println("Test Case 3 END -----");
+		
+		System.out.print("Test Case 4: ");
+		MockClient test4 = new MockClient();
+		test4.mockClient(2,"LOCAL","/home/path");
+		System.out.println("Test Case 4 END -----");
+		
 	}
 	
 	private void mockClient(int jobNumber, String ip, String fileTrans){
 		
 		strgFileName = fileTrans;
+		sendLen = 0;
 		
 		sendBuf = new byte[maxByte];	
 		extraBuf = new byte[extra];
@@ -77,7 +99,7 @@ public class MockClient {
 			if(fileTrans.equals("end")) {
 				client.EndafterACK();
 			} else {
-				// data transfer
+				client.testOperation();
 			}
 			
 		case 2:
@@ -100,7 +122,7 @@ public class MockClient {
 			if(fileTrans.equals("end")) {
 				client.EndafterACK();
 			} else {
-				// data transfer
+				client.testOperation();
 			}
 			
 		default:
@@ -134,6 +156,83 @@ public class MockClient {
 		}
 		shutdown();
 		
+	}
+	
+	private void testOperation() {
+		while(continueRun) {
+			DatagramPacket packetRe = null;
+			try { // expecting ACK
+				packetRe = new DatagramPacket(extraBuf, extraBuf.length);
+				sendReceiveSocket.setSoTimeout(5000);
+				sendReceiveSocket.receive(packetRe);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			if(packetRe.getLength() >= 4) {							
+				int blk = getPkgBlock(dataBuf);
+				int opCode = getPkgOpCode(dataBuf);
+				if( isAckPackage(dataBuf) && (blk==expectedBlock) ) {
+					// correct packet
+					receivedPackageDataLen = packetRe.getLength();
+		        	System.out.println("Client: Received ACK OpCode:" + opCode + ", Block:" + blk + ", Packet Length:" + receivedPackageDataLen);
+		        	System.out.println("From:          remote port(remote TID):" + packet.getPort() + ", remote IP: " + packet.getAddress());
+				} else {
+					System.out.print("Incorrect packet received, opcode: " + opCode + ", Block: " + blk );
+					shutdown();
+				}
+			} else {
+				System.out.print("Invalid packet");
+				shutdown();
+			}
+			int curBlock = getPkgBlock(dataBuf);
+			
+			if(timeToBreak) {
+
+    			closeBufferedInputStream();
+    			closeFileInputStream();		        		
+    		    break;
+	        }
+			
+			// load data to transfer
+			sendLen = readfromFile(sendBuf);
+			
+			if(sendLen != -1) {
+		        
+	        	expectedBlock = curBlock + 1;	
+		        sendBuf[0] = 0;		//data
+		        sendBuf[1] = 3;		//data
+		        sendBuf[2] = (byte)((expectedBlock >> 8) & 0xff);
+		        sendBuf[3] = (byte)(expectedBlock & 0xff);
+		        
+		        System.out.println("WR: Send Block:" + expectedBlock + ", Data Length:" + sendLen);
+		        
+	        	packet = new DatagramPacket(sendBuf, sendLen + 4, remoteIP, remotePort);
+	        	printContents(packet);
+	        	try {
+					sendReceiveSocket.send(packet);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+	        	
+	        } else {
+
+    			closeBufferedInputStream();
+    			closeFileInputStream();
+	        	break;
+	        }
+	        			        
+        	if(sendLen < 512) {
+        		//done
+        		
+        		timeToBreak = true;
+        	}
+			
+			
+		}
+		
+		shutdown();
 	}
 
 	
@@ -186,6 +285,56 @@ public class MockClient {
 		    } catch (NumberFormatException nfe) {
 		        return false;
 		    }
+		}
+		
+		int readfromFile(byte[] buffer) {
+			
+			int read = -1;
+			
+			try {
+				read = bufferedInputStream.read(buffer, 4, 512);
+				
+			} catch (IOException ex) {
+	    		
+				read = -1;
+			}
+
+			return read;
+		}
+		
+
+		void closeBufferedInputStream() {
+			try {
+				if(bufferedInputStream!=null) {
+					bufferedInputStream.close();
+				}
+			}
+			catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+		void closeFileInputStream() {
+			try {
+				if(fileInputStream!=null) {
+					fileInputStream.close();
+				}
+			}
+			catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+		protected void printContents(DatagramPacket p){
+
+		       
+	        byte[] data = new byte[p.getLength()];
+	        System.arraycopy(p.getData(), 0, data, 0, data.length);
+
+	        System.out.print("Containing (String): \n");
+	        String received = new String(p.getData(),0,p.getLength());   
+	        System.out.println(received + "\n");
+
 		}
 		
 		//opcode is the first two bytes in big endian
