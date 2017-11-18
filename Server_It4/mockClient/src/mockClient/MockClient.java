@@ -1,9 +1,13 @@
 package mockClient;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.*;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class MockClient {
 	
@@ -13,7 +17,7 @@ public class MockClient {
 	byte[] extraBuf;
 	static final int maxByte = 516;
 	static final int extra = 518;
-	static final int remotePort = 69;
+	static int remotePort = 69;
 	
 	DatagramSocket sendReceiveSocket;	// Socket for sending and receiving datagram packets
 	DatagramPacket packet;
@@ -34,50 +38,32 @@ public class MockClient {
 	
     int sendLen;
 	int expectedBlock;
-
-	public static void main(String[] args){
-		System.out.print("Test Case 1: ");
-		MockClient test1 = new MockClient();
-		test1.mockClient(1,"LOCAL","end");
-		System.out.println("Test Case 1 END -----");
-		
-		System.out.print("Test Case 2: ");
-		MockClient test2 = new MockClient();
-		test2.mockClient(2,"LOCAL","end");
-		System.out.println("Test Case 2 END -----");
-		
-		System.out.print("Test Case 3: ");
-		MockClient test3 = new MockClient();
-		test3.mockClient(1,"LOCAL","/home/path");
-		System.out.println("Test Case 3 END -----");
-		
-		System.out.print("Test Case 4: ");
-		MockClient test4 = new MockClient();
-		test4.mockClient(2,"LOCAL","/home/path");
-		System.out.println("Test Case 4 END -----");
-		
-	}
 	
-	private void mockClient(int jobNumber, String ip, String fileTrans){
+	protected void MockClient(int jobNumber, String ip, String fileTrans){
 		
-		strgFileName = fileTrans;
 		sendLen = 0;
 		
 		sendBuf = new byte[maxByte];	
 		extraBuf = new byte[extra];
+		strgFileName = fileTrans;
 		
-		MockClient client = new MockClient();
-		client.ConstructSocket();
+		//MockClient client = new MockClient();
+		this.ConstructSocket();
 		
-		if(!validIP(ip)) {
-			client.shutdown();
+		if(ip.equals("LOCAL")){
+			try {
+				remoteIP = InetAddress.getLocalHost();
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			this.shutdown();
 		}
-		try {
-			remoteIP = InetAddress.getByName(ip);
-		} catch (UnknownHostException e1) {
-			
-			e1.printStackTrace();
-		}
+		
+		//if(!validIP(ip)) {
+		//	client.shutdown();
+		//}
 		
 		switch(jobNumber) {
 		case 1:
@@ -87,9 +73,10 @@ public class MockClient {
 			sendBuf[2] = 0;
 			sendBuf[3] = 1;
 			
+			System.out.print(remoteIP);
 			packet = new DatagramPacket(sendBuf, sendBuf.length, remoteIP, remotePort);
 			try {
-				client.sendReceiveSocket.send(packet);
+				this.sendReceiveSocket.send(packet);
 			} catch (IOException e) {
 				
 				e.printStackTrace();
@@ -97,9 +84,9 @@ public class MockClient {
 			
 			//Test case 1, end after first ack.
 			if(fileTrans.equals("end")) {
-				client.EndafterACK();
+				this.EndafterACK();
 			} else {
-				client.testOperation();
+				this.testOperation();
 			}
 			
 		case 2:
@@ -112,7 +99,7 @@ public class MockClient {
 			
 			packet = new DatagramPacket(sendBuf, sendBuf.length, remoteIP, remotePort);
 			try {
-				client.sendReceiveSocket.send(packet);
+				this.sendReceiveSocket.send(packet);
 			} catch (IOException e) {
 				
 				e.printStackTrace();
@@ -120,13 +107,13 @@ public class MockClient {
 			
 			//Test case 1, end after first ack.
 			if(fileTrans.equals("end")) {
-				client.EndafterACK();
+				this.EndafterACK();
 			} else {
-				client.testOperation();
+				this.testOperation();
 			}
 			
 		default:
-			client.shutdown();
+			this.shutdown();
 		}
 	}
 	
@@ -140,6 +127,7 @@ public class MockClient {
 			sendReceiveSocket.setSoTimeout(5000);
 			sendReceiveSocket.receive(packetRe);
 		} catch (IOException e) {
+			System.out.print("No ack received.");
 			e.printStackTrace();
 		}
 		
@@ -151,7 +139,7 @@ public class MockClient {
 			if( isAckPackage(dataBuf) && (blk==expectedBlock) ) {
 				receivedPackageDataLen = packetRe.getLength();
 	        	System.out.println("Client: Received ACK OpCode:" + opCode + ", Block:" + blk + ", Packet Length:" + receivedPackageDataLen);
-	        	System.out.println("From:          remote port(remote TID):" + packet.getPort() + ", remote IP: " + packet.getAddress());
+	        	System.out.println("From:          remote port(remote TID):" + packetRe.getPort() + ", remote IP: " + packetRe.getAddress());
 			}
 		}
 		shutdown();
@@ -159,6 +147,8 @@ public class MockClient {
 	}
 	
 	private void testOperation() {
+		
+		
 		while(continueRun) {
 			DatagramPacket packetRe = null;
 			try { // expecting ACK
@@ -168,6 +158,10 @@ public class MockClient {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			remoteIP = packetRe.getAddress();
+			remotePort = packetRe.getPort(); 
+			
+			dataBuf = packetRe.getData();
 			
 			if(packetRe.getLength() >= 4) {							
 				int blk = getPkgBlock(dataBuf);
@@ -176,7 +170,7 @@ public class MockClient {
 					// correct packet
 					receivedPackageDataLen = packetRe.getLength();
 		        	System.out.println("Client: Received ACK OpCode:" + opCode + ", Block:" + blk + ", Packet Length:" + receivedPackageDataLen);
-		        	System.out.println("From:          remote port(remote TID):" + packet.getPort() + ", remote IP: " + packet.getAddress());
+		        	System.out.println("From:          remote port(remote TID):" + packetRe.getPort() + ", remote IP: " + packetRe.getAddress());
 				} else {
 					System.out.print("Incorrect packet received, opcode: " + opCode + ", Block: " + blk );
 					shutdown();
@@ -194,34 +188,36 @@ public class MockClient {
     		    break;
 	        }
 			
+			if(openFileStream()) {
 			// load data to transfer
-			sendLen = readfromFile(sendBuf);
+				sendLen = readfromFile(sendBuf);
 			
-			if(sendLen != -1) {
-		        
-	        	expectedBlock = curBlock + 1;	
-		        sendBuf[0] = 0;		//data
-		        sendBuf[1] = 3;		//data
-		        sendBuf[2] = (byte)((expectedBlock >> 8) & 0xff);
-		        sendBuf[3] = (byte)(expectedBlock & 0xff);
-		        
-		        System.out.println("WR: Send Block:" + expectedBlock + ", Data Length:" + sendLen);
-		        
-	        	packet = new DatagramPacket(sendBuf, sendLen + 4, remoteIP, remotePort);
-	        	printContents(packet);
-	        	try {
-					sendReceiveSocket.send(packet);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}	
-	        	
-	        } else {
-
-    			closeBufferedInputStream();
-    			closeFileInputStream();
-	        	break;
-	        }
+				if(sendLen != -1) {
+			        
+		        	expectedBlock = curBlock + 1;	
+			        sendBuf[0] = 0;		//data
+			        sendBuf[1] = 3;		//data
+			        sendBuf[2] = (byte)((expectedBlock >> 8) & 0xff);
+			        sendBuf[3] = (byte)(expectedBlock & 0xff);
+			        
+			        System.out.println("WR: Send Block:" + expectedBlock + ", Data Length:" + sendLen);
+			        
+		        	packet = new DatagramPacket(sendBuf, sendLen + 4, remoteIP, remotePort);
+		        	printContents(packet);
+		        	try {
+						sendReceiveSocket.send(packet);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
+		        	
+		        } else {
+	
+	    			closeBufferedInputStream();
+	    			closeFileInputStream();
+		        	break;
+		        }
+			}
 	        			        
         	if(sendLen < 512) {
         		//done
@@ -233,6 +229,38 @@ public class MockClient {
 		}
 		
 		shutdown();
+	}
+	
+	Boolean openFileStream() {
+		Boolean result = false;
+	
+		try {
+			filePath = Paths.get(strgFileName);			
+			File file = new File(strgFileName);
+  
+			fileInputStream = new FileInputStream(file);
+			bufferedInputStream = new BufferedInputStream(fileInputStream);
+			
+			result = true;
+		}
+		catch(InvalidPathException | NullPointerException ex) {	//Paths.get() and new File()
+			//Iteration #4
+			System.out.println("RRQ: openFileStream. " + ex.getMessage());		
+			
+		}
+		catch(FileNotFoundException ex) {	//FileInputStream
+			//Iteration #4
+			System.out.println("RRQ: openFileStream. " + ex.getMessage());			
+			
+		}
+		catch(Exception ex) {
+			//Iteration #4
+			
+			ex.printStackTrace();
+		}
+	
+		System.out.format("Created an inpur (read) file %s result: %s\n", strgFileName, result.toString());
+		return result;
 	}
 
 	

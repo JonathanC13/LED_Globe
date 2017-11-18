@@ -1,0 +1,79 @@
+---------------------------------WRQ-------------------------------------
+C:\Users\migrant\Documents>tftp migrant-pc put test.bin test.bin
+Transfer successful: 1632 bytes in 1 second(s), 1632 bytes/s
+
+
+C:\Users\migrant\Documents>tftp -i migrant-pc put test.bin testAtServer.bin
+Transfer successful: 1632 bytes in 1 second(s), 1632 bytes/s
+	
+	Using Write Request to put (write) the local file named test.bin to the Server as testAtServer.bin
+
+
+
+--------------------------------RRQ--------------------------------------
+C:\Users\migrant\Documents>del test.bin
+Could Not Find C:\Users\migrant\Documents\test.bin
+
+C:\Users\migrant\Documents>dir *.bin
+ Volume in drive C has no label.
+ Volume Serial Number is 1CCB-84C2
+
+ Directory of C:\Users\migrant\Documents
+
+File Not Found
+
+C:\Users\migrant\Documents>tftp migrant-pc get testFromServer.bin test.bin
+Transfer successful: 1632 bytes in 1 second(s), 1632 bytes/s
+
+	Using Read Request to get (read) the server file named testFromServer.bin to the local as test.bin
+
+
+C:\Users\migrant\Documents>dir *.bin
+ Volume in drive C has no label.
+ Volume Serial Number is 1CCB-84C2
+
+ Directory of C:\Users\migrant\Documents
+
+30/01/2016  02:27 PM             1,632 test.bin
+               1 File(s)          1,632 bytes
+               0 Dir(s)  150,294,802,432 bytes free
+
+C:\Users\migrant\Documents>
+
+
+
+
+
+Tftp
+Transfers files to and from a remote computer, typically a computer running UNIX, that is
+running the Trivial File Transfer Protocol (TFTP) service or daemon. Used without
+parameters, tftp displays help.
+
+Syntax
+tftp [-i] [Host] [{get | put}] [Source] [Destination]
+
+Parameters
+-i : Specifies binary image transfer mode (also called octet mode). In binary image mode, the file is transferred in onebyte units. Use this mode when transferring binary files. If it is omitted, the file is transferred in ASCII mode. This is the default transfer mode. This mode converts the endofline (EOL) characters to an appropriate format for the specified
+computer. Use this mode when transferring text files. If a file transfer is successful, the data transfer rate is displayed.
+
+Host : Specifies the local or remote computer.
+
+put : Transfers the file Destination on the local computer to the file Source on the remote computer. Because the TFTP protocol does not support user authentication, the user must be logged onto the remote computer, and the files must be writable on the remote computer.
+
+get : Transfers the file Destination on the remote computer to the file Source on the local computer.
+
+Source : Specifies the file to transfer.
+
+Destination : Specifies where to transfer the file. If Destination is omitted, it is assumed to have the same name as Source.
+
+/? : Displays help at the command prompt.
+
+
+
+Remarks
+• Using the get parameter
+	Specify put if transferring file FileTwo on the local computer to file FileOne on remote computer. Specify get if transferring file FileTwo on the remote computer to file FileOne on the remote computer.
+
+• This command is available only if the Internet Protocol (TCP/IP) protocol is installed
+as a component in the properties of a network adapter in Network Connections
+
