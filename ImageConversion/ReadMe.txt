@@ -3,7 +3,7 @@ This program is stored on the central RPi that communicates with the RPi control
 Required files:
 Pillow library:
 	up to date pip: $ python -m pip install -U pip
-	$ pip install Pillow
+	$ python -m pip install Pillow
 	
 Cimpl.py (No tests, file from Sysc1005 lab, Prof. Bailey)
 	Using some functions.

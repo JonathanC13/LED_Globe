@@ -10,4 +10,4 @@ Execute the test cases by:
 1. Move to directory of files
 2. $ python MotorDriver.py
 
-	Through Python IDE, I constantly receive indent and spacing errors
+	
