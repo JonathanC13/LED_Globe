@@ -58,7 +58,7 @@ public class MockClient {
 				e.printStackTrace();
 			}
 		} else {
-			this.shutdown();
+			shutdown();
 		}
 		
 		//if(!validIP(ip)) {
@@ -76,7 +76,7 @@ public class MockClient {
 			System.out.print(remoteIP);
 			packet = new DatagramPacket(sendBuf, sendBuf.length, remoteIP, remotePort);
 			try {
-				this.sendReceiveSocket.send(packet);
+				sendReceiveSocket.send(packet);
 			} catch (IOException e) {
 				
 				e.printStackTrace();
@@ -84,9 +84,9 @@ public class MockClient {
 			
 			//Test case 1, end after first ack.
 			if(fileTrans.equals("end")) {
-				this.EndafterACK();
+				EndafterACK();
 			} else {
-				this.testOperation();
+				testOperation();
 			}
 			
 		case 2:
@@ -99,7 +99,7 @@ public class MockClient {
 			
 			packet = new DatagramPacket(sendBuf, sendBuf.length, remoteIP, remotePort);
 			try {
-				this.sendReceiveSocket.send(packet);
+				sendReceiveSocket.send(packet);
 			} catch (IOException e) {
 				
 				e.printStackTrace();
@@ -107,13 +107,13 @@ public class MockClient {
 			
 			//Test case 1, end after first ack.
 			if(fileTrans.equals("end")) {
-				this.EndafterACK();
+				EndafterACK();
 			} else {
-				this.testOperation();
+				testOperation();
 			}
 			
 		default:
-			this.shutdown();
+			shutdown();
 		}
 	}
 	
@@ -155,8 +155,14 @@ public class MockClient {
 				packetRe = new DatagramPacket(extraBuf, extraBuf.length);
 				sendReceiveSocket.setSoTimeout(5000);
 				sendReceiveSocket.receive(packetRe);
+			
+			} catch (SocketTimeoutException a) {
+				
+				System.out.print("Client time out.");
+				break;
 			} catch (IOException e) {
 				e.printStackTrace();
+				break;
 			}
 			remoteIP = packetRe.getAddress();
 			remotePort = packetRe.getPort(); 
@@ -221,8 +227,9 @@ public class MockClient {
 	        			        
         	if(sendLen < 512) {
         		//done
-        		
-        		timeToBreak = true;
+        		closeBufferedInputStream();
+    			closeFileInputStream();
+        		break;
         	}
 			
 			

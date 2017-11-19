@@ -225,7 +225,7 @@ public class JobRequestHandler {
 			        
 		        	//write to file the contents of the data packet
 			        byte[] wrBuf = Arrays.copyOfRange(dataBuf, 4, receivedPackageDataLen);		        
-		        	Boolean wrResultOk = WriteToFile(wrBuf);
+			        Boolean wrResultOk = WriteToFile(wrBuf, receivedPackageDataLen - 4);
 		        	if(!wrResultOk) {
 		    			closeBufferedOutputStream();
 		    			closeFileOutputStream();
@@ -250,7 +250,7 @@ public class JobRequestHandler {
 					// This section checks if it was the final packet or not.
 					if(JobCode == 1){
 				        // empty data bytes, then quit this is for job 1
-						if(receivedPackageDataLen == 4) {
+						if(receivedPackageDataLen - 4 == 4) {
 							//done
 							// No value in the data packet to write, so it indicates the user is done.
 							bufferedOutputStream.flush();
@@ -265,12 +265,13 @@ public class JobRequestHandler {
 
 							// write -1 to RPS.txt so runDC.py breaks its loop and ends properly.
 							byte[] end = new byte[] {-1};
-							Boolean ending = WriteToFile(wrBuf);
+							Boolean ending = WriteToFile(end, 2);
 							System.out.println("End value written to RPS.txt: " + ending);
 
 							//break loop that waits for user input before long time out.
 							break;
 						}
+					}
 					
 					if(JobCode == 2){
 						if(receivedPackageDataLen < 516) {
@@ -290,10 +291,11 @@ public class JobRequestHandler {
 							
 
 							
-							break;
+							
 							}
-			        	}	 
-		        	}
+						break;
+			        }	 
+		        
 
 					/*
 					4. the runDC.py will read the value from RPS.txt and calculate the duty cycle to apply, loops constantly reading the file.
@@ -412,8 +414,8 @@ Back to jrqResponseHandler to handle user inputs.
 		// 1. Check if RPS.txt file exists or created. Write 0 to RPS.txt
 		
 		//tests
-		String RPSfile = "C:/Users/Jonathan/Documents/GitHub/LED_Globe/Server_It4/InputFileJob1.txt";
-		String DCpy = "C:/Users/Jonathan/Documents/GitHub/LED_Globe/Server_It4/runDCfake.py";
+		String RPSfile = "C:\\Users\\Jonathan\\Documents\\LED_Globe\\Server_It4\\InputFileJob1.txt";
+		String DCpy = "C:\\Users\\Jonathan\\Documents\\LED_Globe\\Server_It4\\runDCfake.py";
 		
 		// actual
 		//String RPSfile = "/home/Desktop/RPS.txt";
@@ -426,7 +428,7 @@ Back to jrqResponseHandler to handle user inputs.
 		if (filePresent(RPSfile, true) && f.exists()) {
 			// write 0 to RPS.txt to reset it to this default value and also to test write to this file.
 			byte[] wrBuf = new byte[] {0};
-			if(WriteToFile(wrBuf)) {
+			if(WriteToFile(wrBuf, 1)) {
 			
 				//2. execute runDC.py through command line on the RPi
 				// If able, then send ACK and wait for user inputs.
@@ -458,7 +460,7 @@ Back to jrqResponseHandler to handle user inputs.
 	}
 	
 	private boolean doJob2() {
-		String ledFile = "C:/Users/Jonathan/Documents/GitHub/LED_Globe/Server_It4/InputFileJob2.txt";
+		String ledFile = "C:\\Users\\Jonathan\\Documents\\LED_Globe\\Server_It4\\InputFileJob2.txt";
 		boolean result = false;
 		
 		if (filePresent(ledFile, true)) {
@@ -506,11 +508,11 @@ Back to jrqResponseHandler to handle user inputs.
 		return result;	
 	}
 	
-	private boolean WriteToFile(byte[] b) {
+	private boolean WriteToFile(byte[] b, int len) {
 		boolean result = false;
 		try {
 			// opened file is RPS.txt
-			bufferedOutputStream.write(b); 
+			bufferedOutputStream.write(b, 0, len); 
 			result = true;
 			
 		} catch (IOException e) {

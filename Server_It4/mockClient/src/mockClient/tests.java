@@ -27,14 +27,14 @@ public class tests {
 	public void test3() {
 		System.out.print("Test Case 3: ");
 		MockClient test3 = new MockClient();
-		test3.MockClient(1,"LOCAL", "C:/Users/Jonathan/Documents/GitHub/LED_Globe/Server_It4/ReadFileJob1.txt");
+		test3.MockClient(1,"LOCAL", "C:\\Users\\Jonathan\\Documents\\LED_Globe\\Server_It4\\ReadFileJob1.txt");
 		System.out.println("Test Case 3 END -----");
 	}
 	
 	public void test4() {
 		System.out.print("Test Case 4: ");
 		MockClient test4 = new MockClient();
-		test4.MockClient(2,"LOCAL","C:/Users/Jonathan/Documents/GitHub/LED_Globe/Server_It4/ReadFileJob2.txt");
+		test4.MockClient(2,"LOCAL","C:\\Users\\Jonathan\\Documents\\LED_Globe\\Server_It4\\ReadFileJob2.txt");
 		System.out.println("Test Case 4 END -----");
 	}
 }
