@@ -225,7 +225,7 @@ public class JobRequestHandler {
 			        
 		        	//write to file the contents of the data packet
 			        byte[] wrBuf = Arrays.copyOfRange(dataBuf, 4, receivedPackageDataLen);		        
-			        Boolean wrResultOk = WriteToFile(wrBuf, receivedPackageDataLen - 4);
+			        Boolean wrResultOk = WriteToFile(wrBuf, receivedPackageDataLen -4);
 		        	if(!wrResultOk) {
 		    			closeBufferedOutputStream();
 		    			closeFileOutputStream();
@@ -248,9 +248,9 @@ public class JobRequestHandler {
 				        expectedBlock = curBlock + 1;
 				        
 					// This section checks if it was the final packet or not.
-					if(JobCode == 1){
+					/*if(JobCode == 1){
 				        // empty data bytes, then quit this is for job 1
-						if(receivedPackageDataLen - 4 == 4) {
+						if(receivedPackageDataLen == 4) {
 							//done
 							// No value in the data packet to write, so it indicates the user is done.
 							bufferedOutputStream.flush();
@@ -271,9 +271,9 @@ public class JobRequestHandler {
 							//break loop that waits for user input before long time out.
 							break;
 						}
-					}
+					}*/
 					
-					if(JobCode == 2){
+					//if(JobCode == 2){
 						if(receivedPackageDataLen < 516) {
 							//done
 
@@ -294,7 +294,7 @@ public class JobRequestHandler {
 							
 							}
 						break;
-			        }	 
+			        //}	 
 		        
 
 					/*
@@ -432,6 +432,8 @@ Back to jrqResponseHandler to handle user inputs.
 			
 				//2. execute runDC.py through command line on the RPi
 				// If able, then send ACK and wait for user inputs.
+				
+				// Problem here
 				if(runDC(DCpy)) {
 					
 					// Job request setup complete. Ready to receive user input.
@@ -513,6 +515,8 @@ Back to jrqResponseHandler to handle user inputs.
 		try {
 			// opened file is RPS.txt
 			bufferedOutputStream.write(b, 0, len); 
+			
+			
 			result = true;
 			
 		} catch (IOException e) {

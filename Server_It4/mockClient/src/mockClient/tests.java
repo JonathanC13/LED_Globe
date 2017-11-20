@@ -5,8 +5,8 @@ public class tests {
 		tests t = new tests();
 		//t.test1();
 		//t.test2();
-		t.test3();
-		//t.test4();
+		//t.test3();
+		t.test4();
 		
 	}
 	
@@ -34,7 +34,7 @@ public class tests {
 	public void test4() {
 		System.out.print("Test Case 4: ");
 		MockClient test4 = new MockClient();
-		test4.MockClient(2,"LOCAL","C:\\Users\\Jonathan\\Documents\\LED_Globe\\Server_It4\\ReadFileJob2.txt");
+		test4.MockClient(2,"LOCAL","C:\\Users\\Jonathan\\Documents\\LED_Globe\\Server_It4\\ReadFileJob1.txt");
 		System.out.println("Test Case 4 END -----");
 	}
 }
