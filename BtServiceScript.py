@@ -90,7 +90,7 @@ def main():
 
     # These are the operations the service supports
     # Feel free to add more
-    operations = ["ping", "example"]
+    operations = ["ping", "start"]
 
     # Main Bluetooth server loop
     while True:
@@ -116,8 +116,8 @@ def main():
                 response = "op:%s" % ",".join(operations)
             elif data == "ping":
                 response = "msg:Pong"
-            elif data == "example":
-                response = "msg:This is an example"
+            elif data == "start":
+                response = "msg:This is an example!"
             # Insert more here
             else:
                 response = "msg:Not supported"
