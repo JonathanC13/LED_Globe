@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             mmOutputStream.write(msg.getBytes());
 
         } catch (IOException e) {
+            System.out.println("---------> Issue with creating another rfcommsocket HERE");
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -159,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
+//                Thread.currentThread().
             }
         };
 
@@ -169,7 +172,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Perform action on temp button click
 
-                (new Thread(new workerThread("start"))).start();
+                Thread startButtonThread = new Thread(new workerThread("start"));
+                startButtonThread.start();
+
+                // Once user starts Globe, the start button will be unclickable. Must enable in
+                // click handling for "end button".
+                startButton.setEnabled(false);
 
             }
         });
