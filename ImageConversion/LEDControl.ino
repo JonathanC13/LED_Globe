@@ -1,8 +1,13 @@
-#define Hall_PIN 2
+const int Hall_PIN = 2;
 
-boolean update = false  // To start the data transmission
-int delayTime = a;      // This value is from SignalTime.txt
-byte pattern [x][y] = {// need to fill} // Fill 2d array with split values from LEDpattern.txt
+boolean update = false;  // 
+int delayTime = 1000;      // This value is from SignalTime.txt
+const int x = 2;              // rows
+const int y = 6;              // cols
+byte pattern [x][y] = {
+{1,0,0,0,0,0},
+{1,0,0,0,0,0} 
+}; // Fill 2d array with split values from LEDpattern.txt
 
 int current_col = 0;
 
@@ -24,39 +29,42 @@ void setup() {
   pinMode(12, OUTPUT);
   pinMode(13, OUTPUT);
 
-  // Interrupt pin
-  pinMode(Hall_PIN, INPUT_PULLUP);
-
-  setup_hardware_spi(); // internal PULLUP for the hall sensor
-  configure_interrupts(); // Interrupt configuration
+   // Interrupt pin
+  attachInterrupt(digitalPinToInterrupt(Hall_PIN), pin_ISR, FALLING);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  if(update == true){
+  /*if(update == true){
     update = false;
-    if(current_col ++ >= (y-1)){  // reset column, since rotation done
+    if(current_col ++ >= (y)){  // reset column
       current_col = 0;
     }
+  }*/
     next_column(current_col);     // output rows of that column
     current_col++;
-  }
+    if(current_col >= y){
+      current_col = 0;
+    }
+    delay(delayTime);
+  
 }
 
 void next_column(int col){
  for (int row = 0; row < x; row++){
         if(pattern[row][col] == 1){
-          digitalWrite(1, HIGH)
+          digitalWrite(10, HIGH);
+          digitalWrite(11, HIGH);
          }
          else {
-          digitalWrite(1, LOW)
+          digitalWrite(10, LOW);
+          digitalWrite(11, LOW);
          }
       }
-      delay(delayTime); 
 }
 
 // Interrupt -----
-
+/*
 void configure_interrupts(void){
   cli();  // disable interrupts
 
@@ -70,6 +78,9 @@ void configure_interrupts(void){
 // Interrupt trigger for each rotation
 ISR(INT0_vect){
   update = true;
-}
+}*/
+
+void pin_ISR(){
+  current_col = 0;
 
 }
