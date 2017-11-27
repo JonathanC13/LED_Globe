@@ -52,7 +52,7 @@ void next_column(int col){
           digitalWrite(1, LOW)
          }
       }
-      delayMicroseconds(delayTime); 
+      delay(delayTime); 
 }
 
 // Interrupt -----

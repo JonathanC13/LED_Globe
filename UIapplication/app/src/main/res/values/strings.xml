@@ -4,4 +4,5 @@
     <string name="author_footnote">SYSC 3010, M9, 2017</string>
     <string name="end_button">Stop the Globe</string>
     <string name="get_button">Get Input</string>
+    <string name="bt_result">Result of the BlueTooth command</string>
 </resources>
