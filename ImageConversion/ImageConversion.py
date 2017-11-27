@@ -10,15 +10,18 @@ import PIL.Image
 
 from Cimpl import *
 
-class ImageConversion:
-	def thumbNail(self,img):
+led = 48#number of LEDs, Actual is 13 LEDs
 
-		# May add an option to not expand an image if h < 48.
+class ImageConversion:
+
+	global led
+
+	def thumbNail(self,img):
 
 		hori = self.calcHori(get_width(img), get_height(img))
                 # hori of 0 will result in an ValueError down the line
 
-		size = hori, 48
+		size = hori, int(led)
 		infile = img.get_filename()
 
 		#for infile in sys.argv[1:]:
@@ -42,7 +45,7 @@ class ImageConversion:
 			#print ("calcHori: 0 or negative parameter. Width: " + str(width) + " height: " + str(height))
 			return 0
 		else:
-			ratio = float(float(height)/48)
+			ratio = float(float(height)/int(led))
 
 			fhor = float(width/ratio)
 
@@ -95,11 +98,13 @@ class ImageConversion:
 				if sum != 0:
 					#print 1,
 					bitMatrix[i][j] = 1	# x, y. origin top left
-					f.write("1")								#
+					f.write("1,")								#
 				else:
 					#print 0,
 					bitMatrix[i][j] = 0
-					f.write("0")
+					f.write("0,")
+
+			f.write("/")
 		f.close()
 		return bitMatrix
 
@@ -128,7 +133,9 @@ class ImageConversion:
 				break
 
 	# Uno r3 clock 16MHz
-	# recommneded Revolutions per second is 45 (unloaded) so loaded can be approx 30
+	# recommended Revolutions per second is 45 (unloaded) so loaded can be approx 30.
+
+	# Can add read user desired RPS from a text file if have time. Storing the value in a variable is giving me trouble.
 	# Need to determine interval for the signals to the LEDs
 	def signalInterval(self,width):
 		if( width >= 250):
@@ -140,16 +147,22 @@ class ImageConversion:
 		clock = 16000000
 		freq = float(clock/2)
 		changeTime = float(8/freq)	# each byte requires changTime to change
-		ledArray = 48
+		#ledArray = 48
 		rps = 45                        # Figure out what unload RPS translates to this project loaded rps.
 
-		#print changeTime
+		# Attempt to store read value
+		#path = 'C:\\Users\\Jonathan\\Documents\\LED_Globe\\DCmotor\\RPS.txt'
 
-		# RPS and 48xwidth
+		#with open(path, 'r') as f:
+		#	rps = f.read()
+		#print("aaa")
+		#print (str(rps))
+
+		# RPS and led x width
 		#records per second
 		recPS = float(fwidth*rps)
 
-		# 48/8 = 6 bytes
+		# ex, 48/8 = 6 bytes
 		#bytes per second
 		bps = float(recPS*6)
 
@@ -157,8 +170,9 @@ class ImageConversion:
 		issued = float(1/bps)
 
 		#w > 925
-		# faster than changeTime x (48/6). 6x10^-6 seconds. If faster than lower bound, set to a time near it.
-		lowerB = 8*(10. **-6)
+		# faster than ex, changeTime x (48/6). 6x10^-6 seconds. If faster than lower bound, set to a time near it.
+		lowerB = changeTime*(int(led)/2)
+
 		defaultIssue = 20*(10. **-6)
 
 		if(issued < lowerB):
