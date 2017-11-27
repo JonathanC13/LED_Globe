@@ -17,6 +17,7 @@
 #
 # Original script found at:
 #     https://bitbucket.org/MattHawkinsUK/rpispy-misc/raw/master/python/hall.py
+#
 #--------------------------------------
 
 # Import required libraries
@@ -24,10 +25,13 @@ import time
 import datetime
 import RPi.GPIO as GPIO
 
+# Called if sensor output changes.
 def sensorCallback(channel):
-  # Called if sensor output changes
+
+  # Generate a time stamp.
   timestamp = time.time()
   stamp = datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
+  
   if GPIO.input(channel):
     # No magnet
     print("Sensor HIGH " + stamp)
@@ -36,30 +40,34 @@ def sensorCallback(channel):
     print("Sensor LOW " + stamp)
 
 def main():
+
   # Wrap main content in a try block so we can
   # catch the user pressing CTRL-C and run the
   # GPIO cleanup function. This will also prevent
   # the user seeing lots of unnecessary error
   # messages.
-
   try:
-    # Loop until users quits with CTRL-C
+
+    # Loop until users quits with CTRL-C.
     while True :
       time.sleep(0.1)
 
   except KeyboardInterrupt:
-    # Reset GPIO settings
+    # Reset GPIO settings.
     GPIO.cleanup()
 
-# Tell GPIO library to use GPIO references
+# Tell GPIO library to use GPIO references.
 GPIO.setmode(GPIO.BCM)
 
 print("Setup GPIO pin as input on GPIO17")
 
-# Set Switch GPIO as input
-# Pull high by default
+# Set Switch GPIO17 (pin 17) as input.
+# Pull high by default.
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.add_event_detect(17, GPIO.BOTH, callback=sensorCallback, bouncetime=50)
+
+# Set GPIO17 to execute callback function once rising or falling
+# edge detected.
+GPIO.add_event_detect(17, GPIO.BOTH, callback=sensorCallback, bouncetime=100)
 
 print("Setup done and event detection added. Now sensing...")
 
