@@ -210,6 +210,29 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
             }
+
+            // RPi not found in paired devices of device
+            if (mmDevice == null)
+            {
+                // Display error to UI
+                handler.post(new Runnable()
+                {
+                    public void run()
+                    {
+                        myLabel.setText("You need to pair to the LED Globe!");
+                    }
+                });
+            }
+        } else
+        {
+            // Display error to UI
+            handler.post(new Runnable()
+            {
+                public void run()
+                {
+                    myLabel.setText("You need to pair to the LED Globe!");
+                }
+            });
         }
 
 
