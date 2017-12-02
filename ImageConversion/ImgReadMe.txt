@@ -2,11 +2,13 @@ This program is stored on the central RPi that communicates with the RPi control
 
 Required files:
 Pillow library:
-	up to date pip: $ python -m pip install -U pip
-	$ python -m pip install Pillow
+	up to date pip: $ python3 -m pip install -U pip
+	$ python3 -m pip install Pillow
 	
 Cimpl.py (No tests, file from Sysc1005 lab, Prof. Bailey)
 	Using some functions.
+	$ sudo apt-get install python-imaging-tk
+	$ sudo apt-get install python-imaging
 	
 ImageConversion.py
 	from Cimpl import * (Dependency to Cimpl)
@@ -31,4 +33,4 @@ Python Imaging Library, for your version of Python
 
 To RUN
 1. Go to directory of ImageConversion.py
-2. python ImageConversion.py -s test.jpg
+2. python3 UserInputScript.py -s test.jpg

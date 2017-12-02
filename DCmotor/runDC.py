@@ -1,11 +1,13 @@
+#Jonathan Chan
+#SYSC3010
 # When testing with stub, comment GPIO.
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 import time
 import argparse
 import os, sys
 
-from MotorStub import *
+#from MotorStub import *
 
 # When testing with stub, comment GPIO and pwm functions.
 GPIO.setmode(GPIO.BOARD)
@@ -39,6 +41,7 @@ class runDC:
         duty = (float(RPS)*100.0/float(rpsMAX))
 
         #Theo average V = Vmax x duty
+        print(str(duty))
 
         #duty-pwm relation equation. duty = (pwm x 100)/T
 
@@ -61,11 +64,13 @@ class runDC:
                 # ---
 
                 # Actual Inputs ---
-                f = open('/home/pi/Desktop/RPS','r')
+                f = open('//home//pi/Desktop//LED_Globe//DCmotor//RPS.txt','r')
+
                 RPS = f.read()
+                
 		        # -----
 
-                if (RPS == -1): # If file has -1, end motor
+                if (int(RPS) == -1): # If file has -1, end motor
                     fRPS = 0
 
                     dutyCalc = self.userRPStoDuty(fRPS)
@@ -79,12 +84,13 @@ class runDC:
                     # ---
 
                     break
-                elif(RPS < 0): #Cannot have rps of less than 0
+                elif(int(RPS) < 0): #Cannot have rps of less than 0
                     RPS = 0
-                elif (RPS >= UpperLim):
+                elif (int(RPS) > UpperLim):
                     RPS = UpperLim
-
+                
                 fRPS = float(RPS)
+                
 
 		              # -----
                 f.close()
@@ -106,24 +112,29 @@ class runDC:
                 # for testing, break after one input
                 #break
 
-    except KeyboardInterrupt:
-        pass
-    except ValueError:
-        print ("Could not convert data to an integer.")
-    except:
-        print ("Unexpected error:", sys.exc_info()[0])
+        except KeyboardInterrupt:
+            
+            pass
+        except ValueError:
+        
+            
+            print ("Could not convert data to an integer.")
+        except:
+            
+            print ("Unexpected error:", sys.exc_info()[0])
 
 	# When testing with stub, comment GPIO and pwm functions.
-    pwm.stop()
+        print("Ending")
+        pwm.stop()
 
-    GPIO.cleanup()
+        GPIO.cleanup()
 
         # -----
-    return;
+        return;
+
 
 
     #def __init__(self, userRPS):
-        #self.RPS = userRPS
 
 #-- cmd line args
 #parser = argparse.ArgumentParser(description = 'Enter a integer for 0 to 141.')
@@ -139,12 +150,12 @@ class runDC:
 
 #---
 #-- main -- When testing comment out ---
-#run = runDC()
+run = runDC()
 #---
 
 # --- if receive input from command line
 #applyD = run.userRPStoDuty(userArg)
 
 # -- When testing comment out ---
-#run.applyDuty()
+run.applyDuty()
 # ---

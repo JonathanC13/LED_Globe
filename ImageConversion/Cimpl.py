@@ -18,7 +18,8 @@ deleted.
 import os
 import math
 
-from tkinter import *
+import PIL as pillow
+from tkinter import *   #for python 3
 #import tkFileDialog
 import PIL.Image
 import PIL.ImageTk
