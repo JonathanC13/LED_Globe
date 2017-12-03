@@ -1,12 +1,23 @@
 const int Hall_PIN = 2;
 
 boolean update = false;  // 
-int delayTime = 1000;      // This value is from SignalTime.txt
-const int x = 2;              // rows
-const int y = 6;              // cols
+int delayTime = 33.33;      // This value is from SignalTime.txt, function delay(milliseconds)
+const int x = 13;              // rows
+const int y = 26;              // cols
 byte pattern [x][y] = {
-{1,0,0,0,0,0},
-{1,0,0,0,0,0} 
+{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0},
+{0,1,1,0,1,0,0,1,1,1,0,0,1,0,0,0,1,1,0,0,0,1,1,1,1,0},
+{0,1,1,0,1,0,0,1,0,0,0,0,1,0,0,0,1,1,0,0,0,1,0,1,1,0},
+{0,1,1,1,1,0,0,1,1,1,0,0,1,0,0,0,1,1,0,0,1,1,0,0,1,0},
+{0,1,1,1,1,0,0,1,1,1,0,0,1,0,0,0,1,1,0,0,1,1,0,0,1,0},
+{0,1,1,0,1,0,0,1,0,0,0,0,1,0,0,0,1,1,0,0,1,1,0,1,1,0},
+{0,1,1,0,1,0,0,1,1,1,0,0,1,1,1,0,1,1,1,0,0,1,1,1,1,0},
+{1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0},
+{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 }; // Fill 2d array with split values from LEDpattern.txt
 
 int current_col = 0;
@@ -70,54 +81,23 @@ void loop() {
 void next_column(int col){
  for (int row = 0; row < x; row++){
         if(pattern[row][col] == 1){
-          digitalWrite(0, HIGH);
-          
-          digitalWrite(1, HIGH);
-          
-          digitalWrite(3, HIGH);
-          
-          digitalWrite(4, HIGH);
-          
-          digitalWrite(5, HIGH);
-          
-        
-          digitalWrite(6, HIGH);
-          
-          digitalWrite(7, HIGH);
-          
-          digitalWrite(8, HIGH);
-          
-          digitalWrite(9, HIGH);
-          
-          digitalWrite(10, HIGH);
-          
-          digitalWrite(11, HIGH);
-          
-          digitalWrite(12, HIGH);
-          
-          digitalWrite(13, HIGH);
-          
-  
-
- 
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+          if(row > 1){
+            digitalWrite(row+1, HIGH);
+          } else {
+            digitalWrite(row, HIGH);
+          }
+         digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
          }
          else {
           digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-          digitalWrite(0, LOW);
-          digitalWrite(1, LOW);
+          if(row > 1){
+            digitalWrite(row+1, LOW);
+          } else {
+            digitalWrite(row, LOW);
+          }
           
-          digitalWrite(3, LOW);
-          digitalWrite(4, LOW);
-          digitalWrite(5, LOW);
-          digitalWrite(6, LOW);
-          digitalWrite(7, LOW);
-          digitalWrite(8, LOW);
-          digitalWrite(9, LOW);
-          digitalWrite(10, LOW);
-          digitalWrite(11, LOW);
-          digitalWrite(12, LOW);
-          digitalWrite(13, LOW);
+          digitalWrite(0, LOW);
+         
          }
       }
 }

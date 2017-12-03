@@ -10,7 +10,7 @@ import PIL.Image
 
 from Cimpl import *
 
-led = 48#number of LEDs, Actual is 13 LEDs
+led = 13#number of LEDs
 
 class ImageConversion:
 
@@ -55,8 +55,10 @@ class ImageConversion:
 			#1000000 changes in a second
 			# set upper bound to squeeze image horizontal is larger
 			#Arbitrary 250 , 20 micro second intervals
-			if(hor >= 250):
-				hor = 250
+			uBound = 250
+
+			if(hor >= int(uBound)):
+				hor = int(uBound)
 			elif (hor < 1):
 				hor = -1
 
@@ -133,30 +135,29 @@ class ImageConversion:
 				break
 
 	# Uno r3 clock 16MHz
-	# recommended Revolutions per second is 45 (unloaded) so loaded can be approx 30.
+	# recommended Revolutions per second is 60 (unloaded) so loaded can be approx 30.
 
-	# Can add read user desired RPS from a text file if have time. Storing the value in a variable is giving me trouble.
-	# Need to determine interval for the signals to the LEDs
+	# Need to determine interval for the signals to the LEDs. This is for shift registers to operate more LEDs than output pins
+	# For each LED to their own output, then 1/30rps = 0.0333frames/sec. So, 60 pixels needs 60/30 = 2 resulting in 0.0333/ 2 = delay of 0.01665 seconds
 	def signalInterval(self,width):
-		if( width >= 250):
-			fwidth = float(250)
+
+
+		#Upper limit on horizontal pixels, to guarantee the arduino can output fast enough
+		ulimit = 250
+
+		if( width >= int(ulimit)):
+			fwidth = float(ulimit)
 		elif (width <= 0):
 			fwidth = float(1)
 		else:
 			fwidth = float(width)
+
+		# 16 MHz clock on Arduino
 		clock = 16000000
 		freq = float(clock/2)
 		changeTime = float(8/freq)	# each byte requires changTime to change
 		#ledArray = 48
-		rps = 45                        # Figure out what unload RPS translates to this project loaded rps.
-
-		# Attempt to store read value
-		#path = 'C:\\Users\\Jonathan\\Documents\\LED_Globe\\DCmotor\\RPS.txt'
-
-		#with open(path, 'r') as f:
-		#	rps = f.read()
-		#print("aaa")
-		#print (str(rps))
+		rps = 30                        # Revolutions per second when loaded,
 
 		# RPS and led x width
 		#records per second
@@ -170,9 +171,10 @@ class ImageConversion:
 		issued = float(1/bps)
 
 		#w > 925
-		# faster than ex, changeTime x (48/6). 6x10^-6 seconds. If faster than lower bound, set to a time near it.
+		# Calculate lower bound, Ex: for 48 LEDs, 6 is number of bytes; changeTime x (48/6). 6x10^-6 seconds. If faster than lower bound, set to a time near it.
 		lowerB = changeTime*(int(led)/2)
 
+		#default signal time if the pattern requires too fast outputs
 		defaultIssue = 20*(10. **-6)
 
 		if(issued < lowerB):
