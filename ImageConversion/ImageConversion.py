@@ -16,10 +16,11 @@ class ImageConversion:
 
 	global led
 
+	#Converts the image to a certain size so it fits on the LEDs displays
 	def thumbNail(self,img):
 
 		hori = self.calcHori(get_width(img), get_height(img))
-                # hori of 0 will result in an ValueError down the line
+        # hori of 0 will result in an ValueError down the line
 
 		size = hori, int(led)
 		infile = img.get_filename()
@@ -31,18 +32,18 @@ class ImageConversion:
 			im = PIL.Image.open(infile)
 
 			im.thumbnail(size, PIL.Image.LANCZOS)
-                                # hori of 0 will result in an Type error
+            # hori of 0 will result in an Type error
 
 			im.save(file, "JPEG")
 		except:
 			print ("Unexpected error ", sys.exc_info()[0])
-			#print ("cannot create thumbnail for '%s'" % infile)
+			print ("cannot create thumbnail for '%s'" % infile)
 
 		return file
 
 	def calcHori(self, width, height):
 		if(width <= 0 or height <= 0):
-			#print ("calcHori: 0 or negative parameter. Width: " + str(width) + " height: " + str(height))
+			print ("calcHori: 0 or negative parameter. Width: " + str(width) + " height: " + str(height))
 			return 0
 		else:
 			ratio = float(float(height)/int(led))
@@ -64,6 +65,7 @@ class ImageConversion:
 
 		return hor
 
+	# Convert an image to black and white pixels
 	def black_and_white(self, img):
 
 		black = create_color(0, 0, 0)
@@ -73,8 +75,10 @@ class ImageConversion:
 			red, green, blue = col
 
 			brightness = (red + green + blue) / 2
+			# 128 is arbitrary. Picks sensivity range to convert to black
 			if brightness < 128:
 				set_color(img, x, y, black)
+			# overwise convert to white pixel
 			else:
 				set_color(img, x, y, white)
 
@@ -174,7 +178,7 @@ class ImageConversion:
 		# Calculate lower bound, Ex: for 48 LEDs, 6 is number of bytes; changeTime x (48/6). 6x10^-6 seconds. If faster than lower bound, set to a time near it.
 		lowerB = changeTime*(int(led)/2)
 
-		#default signal time if the pattern requires too fast outputs
+		#default signal time if the pattern requires a speed too fast for the outputs. Arbitrary value near lowerB
 		defaultIssue = 20*(10. **-6)
 
 		if(issued < lowerB):
@@ -189,10 +193,8 @@ class ImageConversion:
 		#print issued
 		return float(issued)
 
-
+	# If the user wants to invert a black and white image. White pixels to black and black pixels to white
 	def swap_black_white(self,img):
-
-
 
 		black = create_color(0, 0, 0)
 		white = create_color(255, 255, 255)
@@ -200,14 +202,10 @@ class ImageConversion:
 		for x, y, col in img:
 			red, green, blue = col
 
-
 			if red == 0 and green == 0 and blue == 0:
-
 
 				set_color(img, x, y, white)
 
-
 			elif red == 255 and green == 255 and blue == 255:
-
 
 				set_color(img, x, y, black)
