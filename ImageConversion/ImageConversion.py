@@ -1,7 +1,7 @@
 #Jonathan Chan
 #Sysc3010
 #Bit array generation for LEDs
-
+from __future__ import print_function
 import argparse
 
 import os, sys
@@ -131,6 +131,8 @@ class ImageConversion:
 			if(validBit == False):
 				print ("Contains invalid value that is not a 0 or 1: " + str(matrix[x][y]) + ", Pass")
 				break
+
+		print ("\n\n")
 
 	# Uno r3 clock 16MHz
 	# recommended Revolutions per second is 45 (unloaded) so loaded can be approx 30.

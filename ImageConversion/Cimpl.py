@@ -18,7 +18,7 @@ deleted.
 import os
 import math
 
-from tkinter import *
+from Tkinter import *
 #import tkFileDialog
 import PIL.Image
 import PIL.ImageTk

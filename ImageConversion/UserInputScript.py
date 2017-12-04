@@ -1,3 +1,4 @@
+from __future__ import print_function
 from Cimpl import *
 import argparse
 
@@ -47,6 +48,6 @@ if get_height(thumb) <= 48:
         bits = Convert.bitArray(thumb)					#convert black white to bit array
         Convert.printBitArray(bits)                                     # just printing the bit array for visualization to compare to what is being presented on the globe.
 
-        print("Column interval of " + str(issueRate) + " seconds. When motor is spinning 45 (unload) Revolutions per second.")
+        print("Column interval of " + str(issueRate) + " seconds. When motor is spinning 45 (unload) Revolutions per second.\n")
 else:
         print("Adjusting size of image failed.")
