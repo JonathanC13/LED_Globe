@@ -11,8 +11,8 @@ import os, sys
 
 # When testing with stub, comment GPIO and pwm functions.
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(12, GPIO.OUT)
-pwm = GPIO.PWM(12, 1000) # Arbitrary
+GPIO.setup(12, GPIO.OUT) # GPIO pin 12
+pwm = GPIO.PWM(12, 1000) # Arbitrary 1000 for frequency
 pwm.start(0)
 
 # -----
@@ -21,15 +21,17 @@ class runDC:
 
 
 
-    # gets user desired RPSec then converts to duty cycle
+    # gets user desired Revolutions per second then converts to duty cycle
     def userRPStoDuty(self, RPS):
 
-        #DC motor: #:29DCM28 - 8500 RPM. 141 RPSec @9V (no load)
+        # Alternate DC motor: #:29DCM28 - 8500 RPM. 141 RPSec @9V (no load)
         # rpsMAX = 141
 
-        #currentDC motor: - 13800 RPM. 230 RPSec @3V (no load)
+        #current DC motor: - 13800 RPM. 230 RPSec @3V (no load)
         rpsMAX = 230
-        dcV = 3
+        dcV = 3     # DC voltage
+
+        # Check lower and upper bounds
         if(RPS < 0):
             RPS = 0
         elif (RPS >= rpsMAX):
@@ -49,6 +51,8 @@ class runDC:
 
     # For testing added parameters: inRPS and stub instance
     # def applyDuty(self, inRPS, stubInst):
+
+    # This function reads the desired revolutions per second from a text file, sends it to be converted to the duty cycle, and then applies it to the pwm pin
     def applyDuty(self):
         #stub = stubInst
         #UpperLim = 141     9 DC motor, 8500 RPM = 141 RPS
@@ -57,9 +61,7 @@ class runDC:
             while True:
 			#RPS read from a text file that is written to by the TFTP server.
 
-                #Input Tests ----
-                #RPS changes
-
+                #Input RPS Tests ----
                 #RPS = inRPS
                 # ---
 
@@ -67,9 +69,10 @@ class runDC:
                 f = open('//home//pi/Desktop//LED_Globe//DCmotor//RPS.txt','r')
 
                 RPS = f.read()
-                
+
 		        # -----
 
+                # End condition, if the file contains a value of -1
                 if (int(RPS) == -1): # If file has -1, end motor
                     fRPS = 0
 
@@ -88,11 +91,11 @@ class runDC:
                     RPS = 0
                 elif (int(RPS) > UpperLim):
                     RPS = UpperLim
-                
-                fRPS = float(RPS)
-                
 
-		              # -----
+                fRPS = float(RPS)
+
+
+		        # -----
                 f.close()
                 # ----
                 dutyCalc = self.userRPStoDuty(fRPS)
@@ -112,15 +115,14 @@ class runDC:
                 # for testing, break after one input
                 #break
 
+        # Can end the program and end safely with Ctrl+c
         except KeyboardInterrupt:
-            
             pass
+        # handle invalid value in text file, this error would be expected
         except ValueError:
-        
-            
             print ("Could not convert data to an integer.")
+        # unexpected error
         except:
-            
             print ("Unexpected error:", sys.exc_info()[0])
 
 	# When testing with stub, comment GPIO and pwm functions.
@@ -136,7 +138,7 @@ class runDC:
 
     #def __init__(self, userRPS):
 
-#-- cmd line args
+#-- cmd line args for direct control of RPS input
 #parser = argparse.ArgumentParser(description = 'Enter a integer for 0 to 141.')
 #parser.add_argument('integers', metavar='N', type=int, nargs='?', default='0',
 #                            help='an integer for RPS.')

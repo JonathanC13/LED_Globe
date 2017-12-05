@@ -41,7 +41,10 @@ class ImageConversion:
 
 		return file
 
+    # Need to determine number of horizontal pixels when resizing the  vertical pixels to the number of LEDs
 	def calcHori(self, width, height):
+
+        # Lower bound check
 		if(width <= 0 or height <= 0):
 			print ("calcHori: 0 or negative parameter. Width: " + str(width) + " height: " + str(height))
 			return 0
@@ -55,7 +58,7 @@ class ImageConversion:
 			#6 bytes in 6 micro seconds
 			#1000000 changes in a second
 			# set upper bound to squeeze image horizontal is larger
-			#Arbitrary 250 , 20 micro second intervals
+			#Arbitrary 250 , 20 micro second intervals, as maximum number of horizontal pixels
 			uBound = 250
 
 			if(hor >= int(uBound)):
@@ -82,7 +85,7 @@ class ImageConversion:
 			else:
 				set_color(img, x, y, white)
 
-	# fill bitArray AND write to file
+	# fill bitArray AND write to a text file
 	def bitArray(self, img):
 		# empty the file
 		open("LEDpattern.txt", "w").close()
@@ -96,13 +99,13 @@ class ImageConversion:
 		bitMatrix = [[0 for h in range(r)] for w in range(c)]
 
 		for j in range(0,r):
-			#print ' '
+
 			for i in range(0, c):
 				(r,g,b) = get_color(img, i, j) # x, y. origin top left
-				sum = r+g+b								# left to right, top to bottom
+				sum = r+g+b						# left to right, top to bottom
 
 				if sum != 0:
-					#print 1,
+
 					bitMatrix[i][j] = 1	# x, y. origin top left
 					f.write("1,")								#
 				else:
@@ -114,9 +117,6 @@ class ImageConversion:
 		f.close()
 		return bitMatrix
 
-
-		# add checks for type, values
-		# pre condition: black and white image
 
 	# Honestly this method could be simply print a 2d array.
 	# But we'll have it only print 0s and 1s
@@ -174,23 +174,21 @@ class ImageConversion:
 		#byte issued every X seconds
 		issued = float(1/bps)
 
-		#w > 925
-		# Calculate lower bound, Ex: for 48 LEDs, 6 is number of bytes; changeTime x (48/6). 6x10^-6 seconds. If faster than lower bound, set to a time near it.
+		# Calculate lower bound, Ex: for 48 LEDs, 6 is number of bytes; changeTime x (48/6). 6x10^-6 seconds.
+        # If the required output speed faster than the Arduino is able to output, set to its limit
 		lowerB = changeTime*(int(led)/2)
 
-		#default signal time if the pattern requires a speed too fast for the outputs. Arbitrary value near lowerB
-		defaultIssue = 20*(10. **-6)
-
+        # set to lowerB
 		if(issued < lowerB):
 			issued = lowerB
 		elif fwidth < 1:
-			issued = defaultIssue
+			issued = lowerB
 
+        #write to file
 		f = open("SignalTime.txt", "w")
 		f.write(str(issued))
 		f.close()
 
-		#print issued
 		return float(issued)
 
 	# If the user wants to invert a black and white image. White pixels to black and black pixels to white

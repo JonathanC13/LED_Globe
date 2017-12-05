@@ -47,7 +47,7 @@ if get_height(thumb) <= int(num_led):
         issueRate = Convert.signalInterval(thumb.get_width())		# issue rate is the interval to send each column to the LEDs
 
         bits = Convert.bitArray(thumb)					#convert black white to bit array
-        Convert.printBitArray(bits)                                     # just printing the bit array for visualization to compare to what is being presented on the globe.
+        Convert.printBitArray(bits)                     # just printing the bit array for visualization to compare to what is being presented on the globe.
 
         print("Column interval of " + str(issueRate) + " seconds. When motor is spinning 30 (loaded) Revolutions per second.")
 else:
