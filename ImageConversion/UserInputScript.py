@@ -35,10 +35,10 @@ num_led = 13 #current number of LEDs on the ring.
 Convert = ImageConversion()     # Create instance
 
 img = load_image(userArg)	# load image that was specified in args
-thumbFile = Convert.thumbNail(img) # If image height > 48, shrink image to a specified size, then save in a seperate image file. Ex: testthumbnail.jpg
+thumbFile = Convert.thumbNail(img) # If image height > number of LEDs, shrink image to a specified size, then save in a seperate image file. Ex: testthumbnail.jpg
 thumb = load_image(thumbFile)   # load the shrunken image file
 
-if get_height(thumb) <= int(num_led):
+if get_height(thumb) <= int(num_led):   #confirm the thumbnail dimensions
 
         Convert.black_and_white(thumb)	#convert to black and white
         save_as(thumb, "test_BW.jpg")	#save black and white conversion to as an image file.
