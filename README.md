@@ -8,11 +8,11 @@ RPi2 --> Raspberry Pi v1
 
 ## Overview of Subdirectories ----------------------------------
 
-3d_model_design:		Contains PDF rendered images of the LED ring aparatus that we 3D-printed.
+### 3d_model_design ###:		Contains PDF rendered images of the LED ring aparatus that we 3D-printed.
   
-DCmotor:			All files related to the DC motor componenet of the system. Refer to the README file under this folder.
+### DCmotor ###:			All files related to the DC motor componenet of the system. Refer to the README file under this folder.
   
-ImageConversion:		All files related to converting an image to a bit pattern. Refer to the README under this folder.
+### ImageConversion:		All files related to converting an image to a bit pattern. Refer to the README under this folder.
 
 Server_It4:			Incomplete implementation of TFTP server/client.
     
