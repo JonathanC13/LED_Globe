@@ -2,8 +2,9 @@
 
 ## Nomenclature (according to our final report) ----------------
     
-  RPi1 --> Raspberry Pi v3
-  RPi2 --> Raspberry Pi v1
+RPi1 --> Raspberry Pi v3
+
+RPi2 --> Raspberry Pi v1
 
 ## Overview of Subdirectories ----------------------------------
 
@@ -17,9 +18,14 @@ Server_It4:			Incomplete implementation of TFTP server/client.
     
 UIApplication:			Android Studio project of the user interface for the system. Execution instructions are:
       			
-	-	App was built using Android Studio 2 to be able to work on it in the labs. If using an updated version some libraries might have 					to be updated.
-	-	To test the Bluetooth functionality of the app, the script BtServiceScript.py must be running *first* on RPi1 before running the application (see instructions for this script below).
-	-	An Android mobile device must be used to test the app since an emulator cannot provide Bluetooth functionality. The device must also be paired to RPi1 (check for device name "RPI_Carleton").
+	-	App was built using Android Studio 2 to be able to work on it in the labs. 
+		If using an updated version some libraries might have to be updated.
+	-	To test the Bluetooth functionality of the app, the script BtServiceScript.py
+		must be running *first* on RPi1 before running the application (see 
+		instructions for this script below).
+	-	An Android mobile device must be used to test the app since an emulator cannot 
+		provide Bluetooth functionality. The device must also be paired to RPi1 (check
+		for device name "RPI_Carleton").
 	-	Once the device is connected to your machine, run the app from Android Studio.
 	
 Videos_and_Pictures:		Contains demos of working components and pictures of the system.
