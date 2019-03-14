@@ -1,14 +1,14 @@
 # LED_Globe
 
-## Updates after course finished
-03/14/19 - Videos (mp4) in Videos_and_pictures have beomce unavailable, therefore:
-	HallSensor_Video.mp4 now on Youtube: https://youtu.be/QEPRrl4xu5o
-		In this project, when the hall sensor detects the magnet the LED image pattern is reset to indicate the beginning of the pattern.
-	LEDcheck_video.mp4 now on Youtube: https://youtu.be/COrFFD_RpA8
-	 	This is just to demo the LEDs working to validate that the (whacky) wiring was all connected.
-	Pattern.mp4 now on Youtube: https://youtu.be/dGLgj0t9ru0
-		This is the demo of the LED image pattern being executed. Each vertical array in the binary image pattern is executed in quick succession to match the LED ring rotation speed.
-	No video for completed LED POV Globe due to female connector on the 3D printed ring meant to connect the motor to was defective due to 3D printing problem (While printing the connector was mostly filled with supporting material to build the hollow cylinder). Even if the connection could be made, I doubt the small motor could support the ring's weight and spin it fast enough for the POV effect to be present. 
+## Updates after course finished<br />
+03/14/19 - Videos (mp4) in Videos_and_pictures have beomce unavailable, therefore:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HallSensor_Video.mp4 now on Youtube: https://youtu.be/QEPRrl4xu5o<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In this project, when the hall sensor detects the magnet the LED image pattern is reset to indicate the beginning of the pattern.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEDcheck_video.mp4 now on Youtube: https://youtu.be/COrFFD_RpA8<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is just to demo the LEDs working to validate that the (whacky) wiring was all connected.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pattern.mp4 now on Youtube: https://youtu.be/dGLgj0t9ru0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is the demo of the LED image pattern being executed. Each vertical array in the binary image pattern is executed in quick succession to match the LED ring rotation speed.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No video for completed LED POV Globe due to female connector on the 3D printed ring meant to connect the motor to was defective due to 3D printing problem (While printing the connector was mostly filled with supporting material to build the hollow cylinder). Even if the connection could be made, I doubt the small motor could support the ring's weight and spin it fast enough for the POV effect to be present. 
 
 ## Nomenclature (according to our final report) ----------------
     
