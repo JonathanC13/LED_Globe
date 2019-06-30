@@ -90,7 +90,7 @@ RPi2 --> Raspberry Pi v1
 
 ## End Remark
 
-I'm sorry I couldn't complete the project to a functional state, not being able to get the motor into the LED ring component was embarrassing. Thank you to my teammates for tolerating me.
+I'm sorry I couldn't complete the project to the state of a minimum viable product, not being able to get the motor into the LED ring component was embarrassing. Also, the small motor may have not been able to support the ring's weight and to spin it fast enough to simulate the Persistence of vision effect. I tried to keep the budget low for the group and it hurt the product. Thank you to my teammates for tolerating me.
 
 Denis Chupin <br/>
 Eliab Woldeyes
