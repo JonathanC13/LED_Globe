@@ -90,10 +90,10 @@ RPi2 --> Raspberry Pi v1
 
 ## End Remark
 
-&nbsp;&nbsp;&nbsp;&nbsp;I'm sorry I couldn't complete the project to a functional state, not being able to get the motor into the LED ring component was embarrassing. Thank you to my teammates for tolerating me.
+I'm sorry I couldn't complete the project to a functional state, not being able to get the motor into the LED ring component was embarrassing. Thank you to my teammates for tolerating me.
 
 Denis Chupin
 Eliab Woldeyes
 
-Sincerly, <br/>
+Sincerely, <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;Jonathan
