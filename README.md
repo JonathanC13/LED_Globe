@@ -1,7 +1,15 @@
-# LED_Globe
+# LED_Globe - September 2017 – December 2017 
+https://github.com/JonathanC13/LED_Globe
+
+## Description
+
+- Developed the system architecture, raspberry and Arduino programs, 3D model design for the globe’s ring, and the unit tests.<br/> 
+- The programs were to control the motor, LED pattern, and converting an image to the correct size and output pattern.<br/>
+- The test method used was Functionality-Based Input Domain modeling for each function.<br/>
+- Regrettably unfinished due to 3d printed model defective.<br/>
 
 ## Updates after course finished<br />
-03/14/19 - Videos (mp4) in Videos_and_pictures have beomce unavailable, therefore:<br />
+03/14/19 - Videos (mp4) in Videos_and_pictures have become unavailable, therefore:<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HallSensor_Video.mp4 now on Youtube: https://youtu.be/QEPRrl4xu5o<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In this project, when the hall sensor detects the magnet the LED image pattern is reset to indicate the beginning of the pattern.<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEDcheck_video.mp4 now on Youtube: https://youtu.be/COrFFD_RpA8<br />
@@ -79,3 +87,13 @@ RPi2 --> Raspberry Pi v1
 
 
 **hall.py:**			Python file for testing the Hall effect sensor on RPi1.
+
+## End Remark
+
+	I'm sorry I couldn't complete the project to a functional state, not being able to get the motor into the LED ring component was embarrassing. Thank you to my teammates for tolerating me.
+	
+	Denis
+	Eliab
+	
+	Sincerly,
+		Jonathan
